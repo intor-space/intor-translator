@@ -7,7 +7,7 @@
   "homepage": "https://github.com/yiming-liao/intor-translator#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yiming-liao/intor-translator"
+    "url": "git+https://github.com/yiming-liao/intor-translator.git"
   },
   "bugs": {
     "url": "https://github.com/yiming-liao/intor-translator/issues"
