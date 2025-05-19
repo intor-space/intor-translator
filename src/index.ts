@@ -6,4 +6,5 @@ export type {
   MessageFormatter,
   LoadingMessageHandler,
   PlaceholderHandler,
+  TranslatorHandlers,
 } from "./types/translator-handlers-types";
