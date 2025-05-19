@@ -1,24 +1,24 @@
 import type { Locale, RichReplacement } from "intor-types";
 
 // Translator handlers
-export type TranslatorHandlers<MF = unknown, LMH = unknown, PH = unknown> = {
+export type TranslatorHandlers = {
   /**
    * A custom formatter function to format translation messages.
    * You can use this to integrate ICU libraries like `intl-messageformat`.
    */
-  messageFormatter?: MessageFormatter<MF>;
+  messageFormatter?: MessageFormatter;
 
   /**
    * Handler for loading state of the translation message.
    * Useful when translations are loaded asynchronously.
    */
-  loadingMessageHandler?: LoadingMessageHandler<LMH>;
+  loadingMessageHandler?: LoadingMessageHandler;
 
   /**
    * Handler for placeholders in translation messages.
    * Useful for handling missing or fallback placeholders.
    */
-  placeholderHandler?: PlaceholderHandler<PH>;
+  placeholderHandler?: PlaceholderHandler;
 };
 
 /**

@@ -1,7 +1,7 @@
 {
   "name": "intor-translator",
   "version": "1.0.0",
-  "description": "A modular and extensible i18n core designed for TypeScript and JavaScript projects. Intor enables custom translation logic with support for both frontend and backend environments, featuring runtime configuration, caching, adapters, and message loaders.",
+  "description": "A lightweight, type-safe i18n translator for JavaScript and TypeScript. Provides runtime translation, scoped messages, ICU formatting, and custom handlers.",
   "author": "Yiming Liao",
   "license": "MIT",
   "homepage": "https://github.com/yiming-liao/intor-translator#readme",
@@ -66,6 +66,7 @@
     "eslint-plugin-prettier": "^5.4.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.1.0",
+    "intl-messageformat": "^10.7.16",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-fetch-mock": "^3.0.3",

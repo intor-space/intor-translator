@@ -63,11 +63,7 @@ export const translate = <
     translatorOptions;
 
   const { messageFormatter, loadingMessageHandler, placeholderHandler } =
-    (translatorOptions.handlers as TranslatorHandlers<
-      Result,
-      Result,
-      Result
-    >) || {};
+    (translatorOptions.handlers as TranslatorHandlers) || {};
 
   // Resolve the locales to try (current locale + fallback locales)
   const localesToTry = resolveLocalesToTry(localeRef.current, fallbackLocales);

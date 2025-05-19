@@ -20,10 +20,7 @@ import type { FallbackLocalesMap, LocaleNamespaceMessages } from "intor-types";
  * };
  * ```
  */
-export type TranslatorOptions<
-  Messages extends LocaleNamespaceMessages,
-  Result = string,
-> = {
+export type TranslatorOptions<Messages extends LocaleNamespaceMessages> = {
   /**
    * - The message definitions to be used by the translator.
    * - These should be pre-loaded and structured by locale and namespace.
@@ -38,7 +35,7 @@ export type TranslatorOptions<
   /**
    * - Optional fallback locale(s) to use when a message is missing in the primary locale.
    */
-  fallbackLocales?: FallbackLocalesMap<RawLocale<Messages>>;
+  fallbackLocales?: FallbackLocalesMap;
 
   /**
    * - Whether the translator is currently in a loading state.
@@ -61,5 +58,5 @@ export type TranslatorOptions<
   /**
    * - Optional handlers to customize translation behavior (formatting, placeholders, etc).
    */
-  handlers?: TranslatorHandlers<Result, Result, Result>;
+  handlers?: TranslatorHandlers;
 };
