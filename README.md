@@ -1,11 +1,19 @@
-# IntorTranslator
+<h1 align="center">Intor Translator</h1>
+
+<div align="center">
 
 A highly flexible and type-safe i18n translation engine for modern applications — supporting fallback locales, async loading states, scoped namespaces, and both simple and rich formatting.
 
-[![NPM version](https://img.shields.io/npm/v/intor-translator)](https://www.npmjs.com/package/intor-translator)
-[![Bundle size](https://img.shields.io/bundlephobia/minzip/intor-translator)](https://bundlephobia.com/package/intor-translator)
-[![License](https://img.shields.io/npm/l/intor-translator)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-%E2%9C%94-blue)](https://www.typescriptlang.org/)
+</div>
+
+<div align="center">
+
+[![NPM version](https://img.shields.io/npm/v/intor-translator?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/intor-translator)
+[![Bundle size](https://img.shields.io/bundlephobia/minzip/intor-translator?style=flat&colorA=000000&colorB=000000)](https://bundlephobia.com/package/intor-translator)
+[![License](https://img.shields.io/npm/l/intor-translator?style=flat&colorA=000000&colorB=000000)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-%E2%9C%94-blue?style=flat&colorA=000000&colorB=000000)](https://www.typescriptlang.org/)
+
+</div>
 
 ---
 
@@ -141,20 +149,3 @@ translator.t("notification", { name: "John", count: 5 }); // > John has 5 messag
 - Useful for organizing large sets of translations with shared prefixes
 
 ---
-
-## Project Structure
-
-```bash
-src/
-├── index.ts                  # Main entry point and API
-├── create-translator.ts      # Translator factory function
-├── methods/                  # Helper methods for locale, messages, keys, etc.
-│   ├── get-locale/
-│   ├── set-locale/
-│   ├── get-messages/
-│   └── translate/
-│   ├── has-key/
-│   ├── scoped/
-├── types/                    # Type definitions
-└── utils/                    # Utility functions
-```
