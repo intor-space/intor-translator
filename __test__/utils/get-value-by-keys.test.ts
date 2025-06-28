@@ -1,7 +1,7 @@
-import { getMessageKeyCache } from "intor-cache";
-import { getValueByKey } from "../../src/utils/get-value-by-key";
+import { getMessageKeyCache } from "@/cache";
+import { getValueByKey } from "@/utils/get-value-by-key";
 
-jest.mock("intor-cache", () => ({
+jest.mock("@/cache", () => ({
   getMessageKeyCache: jest.fn().mockReturnValue({
     get: jest.fn(),
     set: jest.fn(),

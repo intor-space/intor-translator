@@ -2986,16 +2986,6 @@ intl-messageformat@^10.7.16:
     "@formatjs/icu-messageformat-parser" "2.11.2"
     tslib "^2.8.0"
 
-intor-cache@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/intor-cache/-/intor-cache-1.0.1.tgz#8915f91a896a2577e9e87e9a7f1e29ab9a0e1792"
-  integrity sha512-CwhofFWm/8BcReJHQQ4AK1lA+vK69TbIcUbtDLITVP2uJR6qPhBsxETIlixGESERZ92bQI5Cbw3rPpwS99X4DQ==
-
-intor-types@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/intor-types/-/intor-types-1.0.1.tgz#528b7f6bf995eec38c94b54119e15a6be6c9ac7f"
-  integrity sha512-C7jUh55QrxoHRI6JU9vgA3PWTd6D6f+bBqZ3zeM59e1ECKjsO/PCpPcpKW7NqRw0YK8RgB89iN/dfVQwuN8xUA==
-
 is-array-buffer@^3.0.4, is-array-buffer@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/is-array-buffer/-/is-array-buffer-3.0.5.tgz#65742e1e687bd2cc666253068fd8707fe4d44280"

@@ -1,4 +1,4 @@
-import { findMessageInLocales } from "../../src/utils/find-message-in-locales";
+import { findMessageInLocales } from "@/utils/find-message-in-locales";
 
 const messages = {
   en: {
@@ -40,7 +40,8 @@ describe("findMessageInLocales", () => {
     const result = findMessageInLocales({
       messages,
       localesToTry: ["en", "fr"],
-      key: "auth.logout.title" as "auth",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      key: "auth.logout.title" as any,
     });
     expect(result).toBeUndefined();
   });

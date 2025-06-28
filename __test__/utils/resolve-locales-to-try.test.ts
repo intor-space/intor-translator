@@ -1,5 +1,5 @@
-import type { FallbackLocalesMap } from "intor-types";
-import { resolveLocalesToTry } from "../../src/utils/resolve-locales-to-try";
+import type { FallbackLocalesMap } from "@/types";
+import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
 
 export const mockFallbackLocales: FallbackLocalesMap = {
   "en-US": ["fr-FR", "zh-TW"],

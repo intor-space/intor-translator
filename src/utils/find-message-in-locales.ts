@@ -1,38 +1,37 @@
-import type { NestedKeyPaths, RawLocale } from "../types/locale-types";
-import type { LocaleNamespaceMessages } from "intor-types";
-import { getValueByKey } from "./get-value-by-key";
+import type {
+  LocaleNamespaceMessages,
+  LocaleKey,
+  UnionLocaleLeafKeys,
+} from "@/types";
+import { getValueByKey } from "@/utils/get-value-by-key";
+
+type FindMessageInLocalesOptions<M extends LocaleNamespaceMessages> = {
+  messages: M;
+  localesToTry: LocaleKey<M>[];
+  key: UnionLocaleLeafKeys<M>;
+};
 
 /**
- * Attempts to find a translated message string by searching through a list of locales.
- *
- * This function iterates over the given locales in order and tries to find
- * the corresponding message by the provided key path in each locale's messages.
- * It returns the first found message string or `undefined` if no message is found.
- *
- * @template Messages - The structure type of all locale messages.
- *
- * @param {Locale[]} localesToTry - An ordered array of locale keys to attempt lookup.
- * @param {Messages} messages - The full messages object containing all locales.
- * @param {NestedKeyPaths<Messages[Locale]>} key - The nested key path string to lookup in messages.
- * @returns {string | undefined} The found message string or undefined if none is found.
+ * Finds the first available string message for a given key across a list of locales.
  *
  * @example
- * ```ts
- * const message = findMessageInLocales(['en', 'fr'], messages, 'auth.login.title');
- * if (message) {
- *   console.log(message);
- * }
- * ```
+ * const messages = {
+ *   en: { home: { title: "Welcome" } },
+ *   zh: { home: { title: "歡迎" } },
+ * };
+ *
+ * findMessageInLocales({
+ *   messages,
+ *   localesToTry: ["en", "zh"],
+ *   key: "home.title",
+ * });
+ * // => "Welcome"
  */
-export const findMessageInLocales = <Messages extends LocaleNamespaceMessages>({
+export const findMessageInLocales = <M extends LocaleNamespaceMessages>({
   messages,
   localesToTry,
   key,
-}: {
-  messages: Messages;
-  localesToTry: RawLocale<Messages>[];
-  key: NestedKeyPaths<Messages[RawLocale<Messages>]>;
-}): string | undefined => {
+}: FindMessageInLocalesOptions<M>): string | undefined => {
   for (const loc of localesToTry) {
     const localeMessages = messages[loc];
 

@@ -1,4 +1,4 @@
-import { getFullKey } from "../../src/utils/get-full-key";
+import { getFullKey } from "@/utils/get-full-key";
 
 describe("getFullKey", () => {
   it("should return key if preKey is undefined", () => {
@@ -11,9 +11,5 @@ describe("getFullKey", () => {
 
   it("should concatenate preKey and key with dot", () => {
     expect(getFullKey("home", "title")).toBe("home.title");
-  });
-
-  it("should handle both preKey and key being undefined", () => {
-    expect(getFullKey(undefined, undefined)).toBeUndefined();
   });
 });

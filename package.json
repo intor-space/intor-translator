@@ -1,6 +1,6 @@
 {
   "name": "intor-translator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight, type-safe i18n translator for JavaScript and TypeScript. Provides runtime translation, scoped messages, ICU formatting, and custom handlers.",
   "author": "Yiming Liao",
   "license": "MIT",
@@ -24,16 +24,20 @@
     "i18n core",
     "custom messages"
   ],
-  "main": "dist/index.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "type": "module",
   "scripts": {
@@ -47,10 +51,6 @@
   "sideEffects": false,
   "engines": {
     "node": ">=16.0.0"
-  },
-  "dependencies": {
-    "intor-cache": "^1.0.1",
-    "intor-types": "^1.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

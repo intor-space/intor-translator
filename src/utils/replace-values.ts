@@ -1,22 +1,13 @@
-import type { Replacement } from "intor-types";
+import type { Replacement } from "@/types";
 
 /**
  * Replaces placeholders in a message string with corresponding values from the given parameters.
  *
- * Placeholders use curly braces with dot notation for nested keys, e.g., `{user.name}`.
- * If a placeholder key does not exist in the parameters, it remains unchanged in the output.
- *
- * @param message - The message string containing placeholders to be replaced.
- * @param params - An optional object containing replacement values, possibly nested.
- * @returns The message string with placeholders replaced by their corresponding values.
- *
  * @example
- * ```ts
- * const msg = "Hello, {user.name}! You have {notifications.count} new messages.";
+ * const message = "Hello, {user.name}! You have {notifications.count} new messages.";
  * const params = { user: { name: "Alice" }, notifications: { count: 5 } };
- * const result = replaceValues(msg, params);
+ * const result = replaceValues(message, params);
  * // result: "Hello, Alice! You have 5 new messages."
- * ```
  */
 export const replaceValues = (
   message: string,

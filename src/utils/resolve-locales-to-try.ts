@@ -1,26 +1,32 @@
-import type { RawLocale } from "../types/locale-types";
-import type { FallbackLocalesMap, LocaleNamespaceMessages } from "intor-types";
+import type {
+  FallbackLocalesMap,
+  LocaleNamespaceMessages,
+  LocaleKey,
+} from "@/types";
 
 /**
  * Resolve a prioritized list of locales to attempt based on a primary locale.
  *
- * The result array always starts with the primary locale, followed by fallback locales
- * as defined in the `fallbackLocales` map. Any fallback locale identical to the primary
- * locale will be excluded to avoid duplication.
+ * @example
+ * const fallbackMap = {
+ *   "zh-TW": ["zh", "en"],
+ *   "en": ["zh-TW"]
+ * };
  *
- * @template Messages - The type describing supported locales and their message namespaces.
+ * resolveLocalesToTry("zh-TW", fallbackMap);
+ * // => ["zh-TW", "zh", "en"]
  *
- * @param locale - The primary locale to use.
- * @param fallbackLocales - Optional map specifying fallback locales for each primary locale.
- * @returns An array of locales to try, with the primary locale first, followed by filtered fallbacks.
+ * resolveLocalesToTry("en", fallbackMap);
+ * // => ["en", "zh-TW"]
+ *
+ * resolveLocalesToTry("zh-TW");
+ * // => ["zh-TW"]
  */
-export const resolveLocalesToTry = <Messages extends LocaleNamespaceMessages>(
-  locale: RawLocale<Messages>,
-  fallbackLocales?: FallbackLocalesMap,
-): RawLocale<Messages>[] => {
+export const resolveLocalesToTry = <M extends LocaleNamespaceMessages>(
+  locale: LocaleKey<M>,
+  fallbackLocales?: FallbackLocalesMap<LocaleKey<M>>,
+): LocaleKey<M>[] => {
   const fallbacks = fallbackLocales?.[locale] || [];
-  return [
-    locale,
-    ...(fallbacks.filter((l) => l !== locale) as RawLocale<Messages>[]),
-  ];
+  const filteredFallbacks = fallbacks.filter((l) => l !== locale);
+  return [locale, ...filteredFallbacks];
 };

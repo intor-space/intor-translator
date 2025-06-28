@@ -1,22 +1,22 @@
-import type { Locale, NamespaceMessages } from "intor-types";
-import { getMessageKeyCache } from "intor-cache";
-
+import type { Locale, NamespaceMessages } from "@/types";
+import { getMessageKeyCache } from "@/cache";
 /**
  * Retrieves a nested value from locale messages by a dot-separated key string.
  *
- * This function supports optional caching to optimize repeated key lookups.
- * When the locale changes, the cache will be cleared automatically.
- *
- * @param locale - The current locale identifier (e.g., "en", "zh-TW").
- * @param messages - The message object containing nested keys and values for the locale.
- * @param key - The dot-separated key path to access the desired message value (e.g., "home.welcome.title").
- * @param useCache - Whether to enable caching for this lookup. Defaults to `true`.
- * @returns The value found at the given key path, or `undefined` if the key does not exist.
- *
  * @example
- * ```ts
- * const title = getValueByKey("en", messages, "home.welcome.title");
- * ```
+ * const messages = {
+ *   en: { home: { title: "Welcome" } },
+ *   zh: { home: { title: "歡迎" } },
+ * };
+ *
+ * getValueByKey("en", messages.en, "home.title");
+ * // => "Welcome"
+ *
+ * getValueByKey("zh", messages.zh, "home.title");
+ * // => "歡迎"
+ *
+ * getValueByKey("en", messages.en, "home.unknown");
+ * // => undefined
  */
 export const getValueByKey = (
   locale: Locale,
