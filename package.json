@@ -1,7 +1,7 @@
 {
   "name": "intor-translator",
-  "version": "1.0.2",
-  "description": "A lightweight, type-safe i18n translator for JavaScript and TypeScript. Provides runtime translation, scoped messages, ICU formatting, and custom handlers.",
+  "version": "1.0.3",
+  "description": "A type safe translator that knows what to say and how to handle the rest. Supports custom messages, rich replacements, and async loading.",
   "author": "Yiming Liao",
   "license": "MIT",
   "homepage": "https://github.com/yiming-liao/intor-translator#readme",
@@ -22,7 +22,16 @@
     "react",
     "translator",
     "i18n core",
-    "custom messages"
+    "custom messages",
+    "rich replacements",
+    "async loading",
+    "type safe",
+    "type-safe",
+    "type safety",
+    "type-safe translator",
+    "type-safe i18n",
+    "type-safe translation",
+    "type-safe core"
   ],
   "exports": {
     ".": {
