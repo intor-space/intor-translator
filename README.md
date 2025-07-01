@@ -2,7 +2,7 @@
 
 <div align="center">
 
-A highly flexible and type-safe i18n translation engine for modern applications — supporting fallback locales, async loading states, scoped namespaces, and both simple and rich formatting.
+A type safe translator that knows what to say and how to handle the rest.
 
 </div>
 
@@ -15,22 +15,25 @@ A highly flexible and type-safe i18n translation engine for modern applications 
 
 </div>
 
+> Translate with confidence.  
+> A type-safe i18n engine with fallback, scoped namespaces, and graceful loading.
+
 ---
 
 ## Features
 
-- 🌍 Fallback locale support
-- ⚡ Reactive translation logic
-- 🧠 Type-safe nested key paths
-- 🔁 Replacement support
-- 🎨 Rich replacement formatting
-- 🌀 Graceful loading state handling
-- 🔧 Configurable handlers for fallback, loading, and placeholder cases
-- 🧩 Scoped translator for modules or namespaces
+- 🌍 Fallback locale support for smooth language switching
+- ⚡ Reactive translation logic that updates on the fly
+- 🧠 Type-safe nested key paths with full autocomplete
+- 🔁 Flexible replacement and interpolation support
+- 🎨 Rich formatting for complex replacement content
+- 🌀 Graceful handling of loading and async states
+- 🔧 Configurable handlers for fallback, loading, and missing keys
+- 🧩 Scoped translators for modules and namespaces
 
 ---
 
-## Installation
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Triangular%20Flag.png" alt="Triangular Flag" width="16" height="16" /> Installation
 
 ```bash
 npm install intor-translator
@@ -44,98 +47,142 @@ yarn add intor-translator
 
 ---
 
-## Quick Start
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" /> Quick Start
 
 ```typescript
-import { createTranslator } from "intor-translator";
+import { Translator } from "intor-translator";
+
+const messages = {
+  en: {
+    hello: "Hello World",
+    greeting: "Hello, {name}!", // Use curly braces for replacements
+  },
+};
 
 // Create a translator instance
-const translator = createTranslator({
-  locale: "en",
-  messages: {
-    en: {
-      hello: "Hello World",
-      greeting: "Hello, {name}!", // Use curly braces for replacements
-    },
-  },
-});
+const translator = new Translator({ messages, locale: "en" });
 
 // Use the translator
-translator.t("hello"); // > Hello World
-translator.t("greeting", { name: "John doe" }); // > Hello, John doe!
+translator.t("hello"); // -> Hello World
+translator.t("greeting", { name: "John doe" }); // -> Hello, John doe!
 ```
 
 ---
 
-## Advanced Features
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Sparkles.png" alt="Sparkles" width="25" height="25" /> Advanced Features
 
 - Fallback Locales, Placeholder & Custom Handlers
 
 ```typescript
-const translator = createTranslator({
+const translator = new Translator({
   locale: "en",
   messages: {
     en: {
-      greeting: "Hello, {name}!",
+      welcome: "Welcome back, {name}",
     },
     zh: {
-      greeting: "哈囉, {name}!",
-      "only-in-zh": "This message is not exist in en",
+      welcome: "歡迎回來，{name}",
+      notification: "你有 {count} 則新通知",
     },
   },
-  fallbackLocales: { en: ["zh"] }, // Falls back to zh if message is missing in en
-  placeholder: "MESSAGE NOT FOUND", // Default text shown when a key is not found in any locale
+  fallbackLocales: { en: ["zh"] }, // Use zh if message not found in en
+  placeholder: "Content unavailable", // Shown if key is missing in all locales
   handlers: {
-    messageFormatter: ({ locale, message }) =>
-      `${message}${locale === "en" ? "." : "。"}`, // Custom message formatter
+    formatMessage: ({ locale, message }) =>
+      locale === "zh" ? `${message}。` : `${message}.`, // Auto punctuation per locale
   },
 });
 
-translator.t("only-in-zh"); // > This message is not exist in en.
+// en has 'welcome'
+console.log(translator.t("welcome", { name: "John" })); // -> Welcome back, John.
+
+// en does not have 'notification', fallback to zh
+console.log(translator.t("notification", { count: 3 })); // -> 你有 3 則新通知。
+
+// message does not exist in any locale
+console.log(translator.t("unknown.key")); // -> Content unavailable
 ```
 
 - With Custom ICU Formatter
 
 ```typescript
-import IntlMessageFormat from "intl-messageformat";
-import { MessageFormatter } from "intor-translator";
+import { Translator, FormatMessage } from "intor-translator";
+import { IntlMessageFormat } from "intl-messageformat";
 
-const formatter: MessageFormatter = ({ message, locale, replacements }) => {
+// Create a custom handler
+const formatMessage: FormatMessage = ({ message, locale, replacements }) => {
   const formatter = new IntlMessageFormat(message, locale);
   return formatter.format(replacements);
 };
 
-const translator = createTranslator({
+const messages = {
+  en: {
+    notification:
+      "{name} has {count, plural, =0 {no messages} one {1 message} other {# messages}}.",
+  },
+};
+
+// Create a translator instance
+const translator = new Translator({
   locale: "en",
-  messages: {
-    en: {
-      notification:
-        "{name} has {count, plural, =0 {no messages} one {1 message} other {# messages}}.",
-    },
-  },
-  handlers: {
-    messageFormatter: formatter,
-  },
+  messages,
+  handlers: { formatMessage },
 });
 
-translator.t("notification", { name: "John", count: 0 }); // > John has no messages.
-translator.t("notification", { name: "John", count: 5 }); // > John has 5 messages.
+translator.t("notification", { name: "John", count: 0 }); // -> John has no messages.
+translator.t("notification", { name: "John", count: 5 }); // -> John has 5 messages.
 ```
 
 ---
 
 ## API Reference
 
-| Option            | Type                             | Description                                                               |
-| ----------------- | -------------------------------- | ------------------------------------------------------------------------- |
-| `messages`        | `Record<Locale, Messages>`       | Translation messages, structured by locale                                |
-| `locale`          | `string`                         | The active locale                                                         |
-| `fallbackLocales` | `Record<Locale, Locale[]>` (opt) | Fallback locales used when a message is missing in the active locale      |
-| `placeholder`     | `string`（opt）                  | Default message to display when a key is missing                          |
-| `isLoading`       | `boolean`（opt）                 | Indicates if the translator is in a loading state                         |
-| `loadingMessage`  | `string`（opt）                  | Message to show when inLoading is true.                                   |
-| `handlers`        | `TranslatorHandlers`（opt）      | Custom handler functions for formatting, loading, or placeholder messages |
-|                   |
+### Translator Parameters
+
+| Option            | Type                                  | Description                                                              |
+| ----------------- | ------------------------------------- | ------------------------------------------------------------------------ |
+| `messages`        | `Readonly<LocaleNamespaceMessages>`   | Translation messages grouped by locale and namespace                     |
+| `locale`          | `string`                              | Active locale key                                                        |
+| `fallbackLocales` | `Record<Locale, Locale[]>` (optional) | Locales to fallback to when a key is missing                             |
+| `placeholder`     | `string` (optional)                   | Message to display when a key is missing in all locales                  |
+| `loadingMessage`  | `string` (optional)                   | Message to display during loading or async state                         |
+| `handlers`        | `TranslateHandlers` (optional)        | Custom functions for formatting, loading state, and missing key handling |
+
+**TranslateHandlers :**
+
+```ts
+type TranslateHandlers = {
+  formatMessage?: (ctx: TranslateContext & { message: string }) => unknown;
+  onLoading?: (ctx: TranslateContext) => unknown;
+  onMissing?: (ctx: TranslateContext) => unknown;
+};
+```
+
+> Use handlers to control how messages are formatted, what to show during loading, and how to respond to missing keys.  
+> Each handler receives a full translation context, including the current locale, key, and replacement values.
+
+---
+
+### Instance Properties
+
+| Property    | Type           | Description                                |
+| ----------- | -------------- | ------------------------------------------ |
+| `messages`  | `M`            | Current messages object                    |
+| `locale`    | `LocaleKey<M>` | Currently active locale                    |
+| `isLoading` | `boolean`      | Whether the translator is in loading state |
+
+---
+
+### Instance Methods
+
+| Method        | Signature                                         | Description                                                         |
+| ------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| `setMessages` | `(messages: M) => void`                           | Replaces the current message set                                    |
+| `setLocale`   | `(locale: LocaleKey<M>) => boolean`               | Sets a new locale and returns whether it changed                    |
+| `setLoading`  | `(state: boolean) => void`                        | Sets the loading state manually                                     |
+| `hasKey`      | `(key, targetLocale?) => boolean`                 | Checks whether the given key exists in the target or current locale |
+| `t`           | `<Result = string>(key, replacements?) => Result` | Translates a key with optional replacements                         |
+| `scoped`      | `(preKey: string) => { hasKey(), t() }`           | Creates a scoped translator with a namespace prefix                 |
 
 **translator.t(key, replacements?)**
 
@@ -143,7 +190,7 @@ translator.t("notification", { name: "John", count: 5 }); // > John has 5 messag
 - Supports nested keys
 - Supports both string and rich replacements
 
-**translator.scope(preKey)**
+**translator.scoped(preKey)**
 
 - Returns a scoped translator instance based on a message subtree
 - Useful for organizing large sets of translations with shared prefixes
