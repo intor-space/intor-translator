@@ -21,11 +21,18 @@ export class ScopeTranslator<
     this.options = options;
   }
 
-  public scoped = <K extends NodeKeys<UnionLocaleMessages<M>> & string>(
+  public scoped = <
+    K extends NodeKeys<UnionLocaleMessages<M>> & string,
+    ScopedKeys extends ScopedLeafKeys<M, K> & string,
+  >(
     preKey: K,
-  ) => {
-    type ScopedKeys = ScopedLeafKeys<M, K> & string;
-
+  ): {
+    hasKey: (key?: ScopedKeys | undefined, targetLocale?: string) => boolean;
+    t: (
+      key?: ScopedKeys | undefined,
+      replacements?: Replacement | RichReplacement,
+    ) => string;
+  } => {
     return {
       hasKey: (key?: ScopedKeys, targetLocale?: string): boolean => {
         const fullKey = getFullKey(preKey, key);
