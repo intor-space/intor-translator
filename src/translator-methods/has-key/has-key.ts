@@ -13,6 +13,13 @@ export const hasKey = <M extends LocaleNamespaceMessages>({
   const messages = messagesRef.current;
   const locale = localeRef.current;
 
+  if (!messages) {
+    throw new Error("[intor-translator] 'messages' is required");
+  }
+  if (!locale) {
+    throw new Error("[intor-translator] 'locale' is required");
+  }
+
   const localesToTry = resolveLocalesToTry(targetLocale || locale);
   return findMessageInLocales({ messages, localesToTry, key }) ? true : false;
 };

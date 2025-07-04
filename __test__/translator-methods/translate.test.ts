@@ -45,6 +45,23 @@ describe("translate", () => {
     return base;
   };
 
+  it("should throw error if messages or locale missing", () => {
+    expect(() =>
+      translate({
+        messagesRef: { current: undefined },
+        localeRef: { current: "en" },
+        key: "123" as never,
+      } as unknown as TranslateOptions<never>),
+    ).toThrow();
+    expect(() =>
+      translate({
+        messagesRef: { current: { en: { key: "value" } } },
+        localeRef: { current: undefined },
+        key: "key",
+      } as unknown as TranslateOptions<never>),
+    ).toThrow();
+  });
+
   it("should return loading message if isLoading is true and no handler", () => {
     const result = translate(
       createBaseOptions({

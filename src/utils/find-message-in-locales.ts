@@ -1,14 +1,14 @@
 import type {
   LocaleNamespaceMessages,
   LocaleKey,
-  UnionLocaleLeafKeys,
+  InferTranslatorKey,
 } from "@/types";
 import { getValueByKey } from "@/utils/get-value-by-key";
 
 type FindMessageInLocalesOptions<M extends LocaleNamespaceMessages> = {
   messages: M;
   localesToTry: LocaleKey<M>[];
-  key: UnionLocaleLeafKeys<M>;
+  key: InferTranslatorKey<M>;
 };
 
 /**

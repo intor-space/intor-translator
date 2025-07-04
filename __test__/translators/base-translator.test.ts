@@ -15,15 +15,6 @@ const messages = {
 };
 
 describe("BaseTranslator", () => {
-  it("should throw error if messages or locale missing", () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(() => new BaseTranslator({} as any)).toThrow();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(() => new BaseTranslator({ messages } as any)).toThrow();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(() => new BaseTranslator({ locale: "en" } as any)).toThrow();
-  });
-
   describe("constructor()", () => {
     it("should initialize with messages and locale", () => {
       const translator = new BaseTranslator({ messages, locale: "en" });

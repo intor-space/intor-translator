@@ -17,6 +17,7 @@ export {
   LeafKeys,
   UnionLocaleLeafKeys,
   ScopedLeafKeys,
+  InferTranslatorKey,
 } from "./nested-keys";
 
 export { MessagesRef, LocaleRef, IsLoadingRef } from "./translator-refs";

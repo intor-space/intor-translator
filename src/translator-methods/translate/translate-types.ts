@@ -1,9 +1,9 @@
 import type { TranslateConfig } from "@/translator-methods/translate";
 import type {
-  UnionLocaleLeafKeys,
   LocaleNamespaceMessages,
   Replacement,
   RichReplacement,
+  InferTranslatorKey,
 } from "@/types";
 import type {
   IsLoadingRef,
@@ -16,6 +16,6 @@ export type TranslateOptions<M extends LocaleNamespaceMessages> = {
   localeRef: LocaleRef<M>;
   isLoadingRef: IsLoadingRef;
   translateConfig: TranslateConfig;
-  key: UnionLocaleLeafKeys<M>;
+  key: InferTranslatorKey<M>;
   replacements?: Replacement | RichReplacement;
 };

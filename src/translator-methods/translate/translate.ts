@@ -14,6 +14,14 @@ export const translate = <M extends LocaleNamespaceMessages, Result = string>({
 }: TranslateOptions<M>): Result => {
   const messages = messagesRef.current;
   const locale = localeRef.current;
+
+  if (!messages) {
+    throw new Error("[intor-translator] 'messages' is required");
+  }
+  if (!locale) {
+    throw new Error("[intor-translator] 'locale' is required");
+  }
+
   const isLoading = isLoadingRef.current;
   const {
     fallbackLocales,

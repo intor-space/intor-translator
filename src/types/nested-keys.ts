@@ -120,3 +120,14 @@ export type ScopedLeafKeys<
       ? LeafKeys<ResolvePathType<ResolvedLocaleMessages, K>, D>
       : never
     : never;
+
+/**
+ * Infer valid key type from locale messages.
+ *
+ * If `M` is not passed or empty, fallback to `string`.
+ */
+export type InferTranslatorKey<M extends LocaleNamespaceMessages> = [
+  M,
+] extends [never]
+  ? string
+  : UnionLocaleLeafKeys<M>;

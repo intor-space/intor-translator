@@ -4,13 +4,13 @@ import type {
   Replacement,
   RichReplacement,
   IsLoadingRef,
+  InferTranslatorKey,
 } from "@/types";
-import type { UnionLocaleLeafKeys } from "@/types/nested-keys";
 import { translate } from "@/translator-methods/translate";
 import { BaseTranslator } from "@/translators/base-translator";
 
 export class CoreTranslator<
-  M extends LocaleNamespaceMessages,
+  M extends LocaleNamespaceMessages = never,
 > extends BaseTranslator<M> {
   protected options: CoreTranslatorOptions<M>;
   protected isLoadingRef: IsLoadingRef = { current: false };
@@ -31,7 +31,7 @@ export class CoreTranslator<
   }
 
   public t = <Result = string>(
-    key: UnionLocaleLeafKeys<M>,
+    key: InferTranslatorKey<M>,
     replacements?: Replacement | RichReplacement,
   ): Result => {
     return translate({

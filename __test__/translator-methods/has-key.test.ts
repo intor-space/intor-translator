@@ -28,6 +28,23 @@ describe("hasKey", () => {
     };
   };
 
+  it("should throw error if messages or locale missing", () => {
+    expect(() =>
+      hasKey({
+        messagesRef: { current: undefined },
+        localeRef: { current: "en" },
+        key: "123" as never,
+      }),
+    ).toThrow();
+    expect(() =>
+      hasKey({
+        messagesRef: { current: { en: { key: "value" } } },
+        localeRef: { current: undefined },
+        key: "key",
+      }),
+    ).toThrow();
+  });
+
   it("should return true if key exists in default locale", () => {
     (findMessageInLocales as jest.Mock).mockReturnValueOnce("哈囉");
 

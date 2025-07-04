@@ -12,7 +12,7 @@ import type { LocaleNamespaceMessages, LocaleKey } from "@/types";
  * };
  */
 export type MessagesRef<M extends LocaleNamespaceMessages> = {
-  current: Readonly<M>;
+  current?: Readonly<M>;
 };
 
 /**
@@ -24,7 +24,7 @@ export type MessagesRef<M extends LocaleNamespaceMessages> = {
  * };
  */
 export type LocaleRef<M extends LocaleNamespaceMessages> = {
-  current: LocaleKey<M>;
+  current?: LocaleKey<M>;
 };
 
 /**

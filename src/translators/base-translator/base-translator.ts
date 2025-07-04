@@ -2,33 +2,28 @@ import type { BaseTranslatorOptions } from "@/translators/base-translator";
 import type {
   LocaleNamespaceMessages,
   LocaleKey,
-  UnionLocaleLeafKeys,
   LocaleRef,
   MessagesRef,
+  InferTranslatorKey,
 } from "@/types";
 import { clearMessageKeyCache } from "@/cache";
 import { hasKey } from "@/translator-methods/has-key";
 
-export class BaseTranslator<M extends LocaleNamespaceMessages> {
-  protected options: BaseTranslatorOptions<M>;
-  protected messagesRef: MessagesRef<M> = { current: {} as M };
-  protected localeRef: LocaleRef<M> = { current: "" as LocaleKey<M> };
+export class BaseTranslator<M extends LocaleNamespaceMessages = never> {
+  protected messagesRef: MessagesRef<M> = { current: undefined };
+  protected localeRef: LocaleRef<M> = { current: undefined };
 
-  constructor(options: BaseTranslatorOptions<M>) {
-    if (!options.messages) {
-      throw new Error("[intor-translator] 'messages' is required");
+  constructor(options: BaseTranslatorOptions<M> = {}) {
+    if (options.messages) {
+      this.messagesRef.current = options.messages;
     }
-    if (!options.locale) {
-      throw new Error("[intor-translator] 'locale' is required");
+    if (options.locale) {
+      this.localeRef.current = options.locale;
     }
-
-    this.options = options;
-    this.messagesRef.current = options.messages;
-    this.localeRef.current = options.locale;
   }
 
   /** Get all message data. */
-  public get messages(): M {
+  public get messages(): M | undefined {
     return this.messagesRef.current;
   }
 
@@ -39,13 +34,13 @@ export class BaseTranslator<M extends LocaleNamespaceMessages> {
   }
 
   /** Get the current active locale. */
-  public get locale(): LocaleKey<M> {
+  public get locale(): LocaleKey<M> | undefined {
     return this.localeRef.current;
   }
 
   /** Change the active locale if available. */
   public setLocale(newLocale: LocaleKey<M>): boolean {
-    if (newLocale in this.messagesRef.current) {
+    if (this.messagesRef.current && newLocale in this.messagesRef.current) {
       this.localeRef.current = newLocale;
       return true;
     }
@@ -54,7 +49,7 @@ export class BaseTranslator<M extends LocaleNamespaceMessages> {
 
   /** Check if a key exists in the specified locale or current locale. */
   public hasKey = (
-    key: UnionLocaleLeafKeys<M>,
+    key: InferTranslatorKey<M>,
     targetLocale?: LocaleKey<M>,
   ): boolean => {
     return hasKey({
