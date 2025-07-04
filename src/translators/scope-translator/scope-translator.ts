@@ -14,11 +14,10 @@ import { CoreTranslator } from "@/translators/core-translator";
 import { getFullKey } from "@/utils/get-full-key";
 
 export class ScopeTranslator<
-  M extends LocaleNamespaceMessages,
+  M extends LocaleNamespaceMessages = never,
 > extends CoreTranslator<M> {
-  constructor(options: CoreTranslatorOptions<M>) {
+  constructor(options?: CoreTranslatorOptions<M>) {
     super(options);
-    this.options = options;
   }
 
   public scoped = <

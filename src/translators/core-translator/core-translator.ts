@@ -15,9 +15,9 @@ export class CoreTranslator<
   protected options: CoreTranslatorOptions<M>;
   protected isLoadingRef: IsLoadingRef = { current: false };
 
-  constructor(options: CoreTranslatorOptions<M>) {
+  constructor(options?: CoreTranslatorOptions<M>) {
     super(options);
-    this.options = options;
+    this.options = options || {};
   }
 
   /** Get the current loading state. */
