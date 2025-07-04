@@ -27,9 +27,14 @@ export class BaseTranslator<M extends LocaleNamespaceMessages = never> {
     return this.messagesRef.current;
   }
 
-  /** Replace messages with new ones. */
-  public setMessages(messages: M): void {
-    this.messagesRef.current = messages;
+  /**
+   * Replace messages with new ones.
+   *
+   * Note: This allows runtime setting of messages even if M is inferred as `never` (uninitialized).
+   * Type cast is used to bypass TypeScript restrictions on dynamic messages.
+   */
+  public setMessages<N extends LocaleNamespaceMessages>(messages: N) {
+    this.messagesRef.current = messages as unknown as M;
     clearMessageKeyCache();
   }
 

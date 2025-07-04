@@ -25,6 +25,11 @@ describe("CoreTranslator", () => {
     expect(translator.isLoading).toBe(false);
   });
 
+  it("should fallback to empty object when no options are passed", () => {
+    const translator = new CoreTranslator();
+    expect(translator["options"]).toEqual({});
+  });
+
   describe("setLoading()", () => {
     it("should allow changing loading state", () => {
       const translator = new CoreTranslator({
