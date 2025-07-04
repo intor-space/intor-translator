@@ -43,13 +43,9 @@ export class BaseTranslator<M extends LocaleNamespaceMessages = never> {
     return this.localeRef.current;
   }
 
-  /** Change the active locale if available. */
-  public setLocale(newLocale: LocaleKey<M>): boolean {
-    if (this.messagesRef.current && newLocale in this.messagesRef.current) {
-      this.localeRef.current = newLocale;
-      return true;
-    }
-    return false;
+  /** Change the active locale. */
+  public setLocale(newLocale: LocaleKey<M>): void {
+    this.localeRef.current = newLocale;
   }
 
   /** Check if a key exists in the specified locale or current locale. */

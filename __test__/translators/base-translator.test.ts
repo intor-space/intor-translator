@@ -43,17 +43,8 @@ describe("BaseTranslator", () => {
   describe("setLocale()", () => {
     it("should return true when setting a valid locale", () => {
       const translator = new BaseTranslator({ messages, locale: "en" });
-      const result = translator.setLocale("zh");
-      expect(result).toBe(true);
+      translator.setLocale("zh");
       expect(translator.locale).toBe("zh");
-    });
-
-    it("should return false when setting an invalid locale", () => {
-      const translator = new BaseTranslator({ messages, locale: "en" });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const result = translator.setLocale("fr" as any);
-      expect(result).toBe(false);
-      expect(translator.locale).toBe("en");
     });
   });
 
