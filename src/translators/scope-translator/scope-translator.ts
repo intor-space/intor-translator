@@ -1,3 +1,4 @@
+import type { ScopedTranslatorMethods, TranslatorMethods } from "./types";
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
 import type {
   LocaleKey,
@@ -5,7 +6,6 @@ import type {
   Replacement,
   RichReplacement,
   NodeKeys,
-  ScopedLeafKeys,
   InferTranslatorKey,
 } from "@/types";
 import { hasKey } from "@/translator-methods/has-key";
@@ -21,28 +21,10 @@ export class ScopeTranslator<M = unknown> extends CoreTranslator<M> {
   // With prekey
   public scoped<K extends NodeKeys<UnionLocaleMessages<M>> & string>(
     preKey: K,
-  ): {
-    hasKey: (
-      key?: ScopedLeafKeys<M, K> & string,
-      targetLocale?: LocaleKey<M>,
-    ) => boolean;
-    t: (
-      key?: ScopedLeafKeys<M, K> & string,
-      replacements?: Replacement | RichReplacement,
-    ) => string;
-  };
+  ): ScopedTranslatorMethods<M, K>;
 
   // Without prekey
-  public scoped(): {
-    hasKey: (
-      key?: InferTranslatorKey<M> & string,
-      targetLocale?: LocaleKey<M>,
-    ) => boolean;
-    t: (
-      key?: InferTranslatorKey<M> & string,
-      replacements?: Replacement | RichReplacement,
-    ) => string;
-  };
+  public scoped(): TranslatorMethods<M>;
 
   public scoped(preKey?: string) {
     return {
@@ -55,7 +37,6 @@ export class ScopeTranslator<M = unknown> extends CoreTranslator<M> {
           targetLocale,
         });
       },
-
       t: (
         key?: string,
         replacements?: Replacement | RichReplacement,

@@ -1,4 +1,4 @@
-export { ScopeTranslator as Translator } from "./translators";
+export { ScopeTranslator as Translator } from "../src/translators";
 
 export type {
   // basic
@@ -23,11 +23,12 @@ export type {
   LeafKeys,
   UnionLocaleLeafKeys,
   ScopedLeafKeys,
+  InferTranslatorKey,
   // translator refs
   MessagesRef,
   LocaleRef,
   IsLoadingRef,
-} from "./types";
+} from "../src/types";
 
 export {
   TranslateConfig,
@@ -36,4 +37,4 @@ export {
   OnLoading,
   OnMissing,
   TranslateContext,
-} from "./translator-methods/translate";
+} from "../src/translator-methods/translate";
