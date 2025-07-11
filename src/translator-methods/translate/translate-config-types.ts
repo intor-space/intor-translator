@@ -1,9 +1,9 @@
-import type { FallbackLocalesMap } from "@/types";
+import type { FallbackLocalesMap, LocaleKey } from "@/types";
 import type { Locale, Replacement, RichReplacement } from "@/types";
 
 /** Config options for translation behavior. */
-export type TranslateConfig = {
-  fallbackLocales?: FallbackLocalesMap;
+export type TranslateConfig<M> = {
+  fallbackLocales?: FallbackLocalesMap<LocaleKey<M>>;
   loadingMessage?: string;
   placeholder?: string;
   handlers?: TranslateHandlers;

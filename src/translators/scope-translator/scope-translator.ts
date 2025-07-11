@@ -1,21 +1,19 @@
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
 import type {
   UnionLocaleMessages,
-  UnionLocaleLeafKeys,
-  LocaleNamespaceMessages,
   Replacement,
   RichReplacement,
   NodeKeys,
   ScopedLeafKeys,
+  InferTranslatorKey,
+  LocaleKey,
 } from "@/types";
 import { hasKey } from "@/translator-methods/has-key";
 import { translate } from "@/translator-methods/translate";
 import { CoreTranslator } from "@/translators/core-translator";
 import { getFullKey } from "@/utils/get-full-key";
 
-export class ScopeTranslator<
-  M extends LocaleNamespaceMessages = never,
-> extends CoreTranslator<M> {
+export class ScopeTranslator<M = unknown> extends CoreTranslator<M> {
   constructor(options?: CoreTranslatorOptions<M>) {
     super(options);
   }
@@ -26,7 +24,7 @@ export class ScopeTranslator<
   ): {
     hasKey: (
       key?: ScopedLeafKeys<M, K> & string,
-      targetLocale?: string,
+      targetLocale?: LocaleKey<M>,
     ) => boolean;
     t: (
       key?: ScopedLeafKeys<M, K> & string,
@@ -37,23 +35,23 @@ export class ScopeTranslator<
   // Without prekey
   public scoped(): {
     hasKey: (
-      key?: UnionLocaleLeafKeys<M> & string,
-      targetLocale?: string,
+      key?: InferTranslatorKey<M> & string,
+      targetLocale?: LocaleKey<M>,
     ) => boolean;
     t: (
-      key?: UnionLocaleLeafKeys<M> & string,
+      key?: InferTranslatorKey<M> & string,
       replacements?: Replacement | RichReplacement,
     ) => string;
   };
 
   public scoped(preKey?: string) {
     return {
-      hasKey: (key?: string, targetLocale?: string): boolean => {
+      hasKey: (key?: string, targetLocale?: LocaleKey<M>): boolean => {
         const fullKey = getFullKey(preKey, key);
         return hasKey({
           messagesRef: this.messagesRef,
           localeRef: this.localeRef,
-          key: fullKey as UnionLocaleLeafKeys<M>,
+          key: fullKey as InferTranslatorKey<M>,
           targetLocale,
         });
       },
@@ -68,7 +66,7 @@ export class ScopeTranslator<
           localeRef: this.localeRef,
           isLoadingRef: this.isLoadingRef,
           translateConfig: this.options,
-          key: fullKey as UnionLocaleLeafKeys<M>,
+          key: fullKey as InferTranslatorKey<M>,
           replacements,
         });
       },

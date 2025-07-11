@@ -1,11 +1,7 @@
-import type {
-  LocaleNamespaceMessages,
-  LocaleKey,
-  InferTranslatorKey,
-} from "@/types";
+import type { LocaleKey, InferTranslatorKey } from "@/types";
 import { getValueByKey } from "@/utils/get-value-by-key";
 
-type FindMessageInLocalesOptions<M extends LocaleNamespaceMessages> = {
+type FindMessageInLocalesOptions<M> = {
   messages: M;
   localesToTry: LocaleKey<M>[];
   key: InferTranslatorKey<M>;
@@ -27,7 +23,7 @@ type FindMessageInLocalesOptions<M extends LocaleNamespaceMessages> = {
  * });
  * // => "Welcome"
  */
-export const findMessageInLocales = <M extends LocaleNamespaceMessages>({
+export const findMessageInLocales = <M>({
   messages,
   localesToTry,
   key,

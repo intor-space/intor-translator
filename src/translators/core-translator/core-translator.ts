@@ -1,6 +1,5 @@
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
 import type {
-  LocaleNamespaceMessages,
   Replacement,
   RichReplacement,
   IsLoadingRef,
@@ -9,9 +8,7 @@ import type {
 import { translate } from "@/translator-methods/translate";
 import { BaseTranslator } from "@/translators/base-translator";
 
-export class CoreTranslator<
-  M extends LocaleNamespaceMessages = never,
-> extends BaseTranslator<M> {
+export class CoreTranslator<M = unknown> extends BaseTranslator<M> {
   protected options: CoreTranslatorOptions<M>;
   protected isLoadingRef: IsLoadingRef = { current: false };
 

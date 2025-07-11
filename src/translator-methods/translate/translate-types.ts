@@ -1,21 +1,16 @@
 import type { TranslateConfig } from "@/translator-methods/translate";
-import type {
-  LocaleNamespaceMessages,
-  Replacement,
-  RichReplacement,
-  InferTranslatorKey,
-} from "@/types";
+import type { Replacement, RichReplacement, InferTranslatorKey } from "@/types";
 import type {
   IsLoadingRef,
   LocaleRef,
   MessagesRef,
 } from "@/types/translator-refs";
 
-export type TranslateOptions<M extends LocaleNamespaceMessages> = {
+export type TranslateOptions<M> = {
   messagesRef: MessagesRef<M>;
   localeRef: LocaleRef<M>;
   isLoadingRef: IsLoadingRef;
-  translateConfig: TranslateConfig;
+  translateConfig: TranslateConfig<M>;
   key: InferTranslatorKey<M>;
   replacements?: Replacement | RichReplacement;
 };

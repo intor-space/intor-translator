@@ -1,6 +1,6 @@
-import type { LocaleKey, LocaleNamespaceMessages } from "@/types";
+import type { LocaleKey } from "@/types";
 
-export interface BaseTranslatorOptions<M extends LocaleNamespaceMessages> {
+export interface BaseTranslatorOptions<M> {
   messages?: Readonly<M>;
   locale?: LocaleKey<M>;
 }

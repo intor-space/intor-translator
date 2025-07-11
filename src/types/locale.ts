@@ -1,5 +1,3 @@
-import type { LocaleNamespaceMessages } from "@/types";
-
 /**
  * Extracts the locale keys from the messages object as string literals.
  *
@@ -10,7 +8,7 @@ import type { LocaleNamespaceMessages } from "@/types";
  * }>;
  * // Locales is "en" | "zh-TW"
  */
-export type LocaleKey<M extends LocaleNamespaceMessages> = keyof M & string;
+export type LocaleKey<M> = keyof M & string;
 
 /**
  * A map that defines fallback locales for each base locale.

@@ -88,5 +88,4 @@ export type LocaleNamespaceMessages = Record<Locale, NamespaceMessages>;
  * type Result = UnionLocaleMessages<typeof messages>;
  * // Result: { auth: { login: "Login" } } | { auth: { logout: "登出" } }
  */
-export type UnionLocaleMessages<M extends LocaleNamespaceMessages> =
-  M[LocaleKey<M>];
+export type UnionLocaleMessages<M> = M[LocaleKey<M>];

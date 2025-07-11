@@ -1,10 +1,10 @@
 import type { TranslateOptions } from "@/translator-methods/translate";
-import type { LocaleNamespaceMessages, Replacement } from "@/types";
+import type { Replacement } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";
 import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
 
-export const translate = <M extends LocaleNamespaceMessages, Result = string>({
+export const translate = <M, Result = string>({
   messagesRef,
   localeRef,
   isLoadingRef,

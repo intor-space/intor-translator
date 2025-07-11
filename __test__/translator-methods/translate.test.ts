@@ -1,5 +1,5 @@
 import type { TranslateOptions } from "@/translator-methods/translate";
-import type { LocaleNamespaceMessages, UnionLocaleLeafKeys } from "@/types";
+import type { InferTranslatorKey, LocaleNamespaceMessages } from "@/types";
 import { translate } from "@/translator-methods/translate";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";
@@ -37,7 +37,7 @@ describe("translate", () => {
         placeholder: "N/A",
         handlers: {},
       },
-      key: "hello" as UnionLocaleLeafKeys<M>,
+      key: "hello" as InferTranslatorKey<M>,
       replacements: { name: "Yiming" },
       ...overrides,
     };

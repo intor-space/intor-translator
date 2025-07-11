@@ -1,8 +1,4 @@
-import type {
-  FallbackLocalesMap,
-  LocaleNamespaceMessages,
-  LocaleKey,
-} from "@/types";
+import type { FallbackLocalesMap, LocaleKey } from "@/types";
 
 /**
  * Resolve a prioritized list of locales to attempt based on a primary locale.
@@ -22,7 +18,7 @@ import type {
  * resolveLocalesToTry("zh-TW");
  * // => ["zh-TW"]
  */
-export const resolveLocalesToTry = <M extends LocaleNamespaceMessages>(
+export const resolveLocalesToTry = <M>(
   locale: LocaleKey<M>,
   fallbackLocales?: FallbackLocalesMap<LocaleKey<M>>,
 ): LocaleKey<M>[] => {

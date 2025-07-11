@@ -1,4 +1,4 @@
-import type { LocaleNamespaceMessages, LocaleKey } from "@/types";
+import type { LocaleKey } from "@/types";
 
 /**
  * A ref object holding all localized messages by locale.
@@ -11,7 +11,7 @@ import type { LocaleNamespaceMessages, LocaleKey } from "@/types";
  *   }
  * };
  */
-export type MessagesRef<M extends LocaleNamespaceMessages> = {
+export type MessagesRef<M> = {
   current?: Readonly<M>;
 };
 
@@ -23,7 +23,7 @@ export type MessagesRef<M extends LocaleNamespaceMessages> = {
  *   current: "en"
  * };
  */
-export type LocaleRef<M extends LocaleNamespaceMessages> = {
+export type LocaleRef<M> = {
   current?: LocaleKey<M>;
 };
 

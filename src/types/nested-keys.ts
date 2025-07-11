@@ -74,10 +74,7 @@ export type LeafKeys<M, D extends number = DefaultDepth> = [D] extends [never]
  * @example
  * UnionLocaleLeafKeys<{ en: { a: { b: "x" } }, zh: { a: { c: "y" } } }> → "a.b" | "a.c"
  */
-export type UnionLocaleLeafKeys<
-  M extends LocaleNamespaceMessages,
-  D extends number = DefaultDepth,
-> =
+export type UnionLocaleLeafKeys<M, D extends number = DefaultDepth> =
   UnionLocaleMessages<M> extends NamespaceMessages
     ? LeafKeys<UnionLocaleMessages<M>, D>
     : never;
@@ -111,7 +108,7 @@ export type ResolvePathType<
  * ScopedLeafKeys<Messages, "auth.login"> → "success" | "failed"
  */
 export type ScopedLeafKeys<
-  M extends LocaleNamespaceMessages,
+  M,
   K extends string,
   D extends number = DefaultDepth,
 > =
@@ -126,8 +123,6 @@ export type ScopedLeafKeys<
  *
  * If `M` is not passed or empty, fallback to `string`.
  */
-export type InferTranslatorKey<M extends LocaleNamespaceMessages> = [
-  M,
-] extends [never]
-  ? string
-  : UnionLocaleLeafKeys<M>;
+export type InferTranslatorKey<M> = M extends LocaleNamespaceMessages
+  ? UnionLocaleLeafKeys<M>
+  : string;

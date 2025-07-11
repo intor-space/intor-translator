@@ -9,7 +9,7 @@ import type {
 import { clearMessageKeyCache } from "@/cache";
 import { hasKey } from "@/translator-methods/has-key";
 
-export class BaseTranslator<M extends LocaleNamespaceMessages = never> {
+export class BaseTranslator<M = unknown> {
   protected messagesRef: MessagesRef<M> = { current: undefined };
   protected localeRef: LocaleRef<M> = { current: undefined };
 

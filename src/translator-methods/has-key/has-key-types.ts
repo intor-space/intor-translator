@@ -1,11 +1,7 @@
-import type {
-  LocaleKey,
-  LocaleNamespaceMessages,
-  InferTranslatorKey,
-} from "@/types";
+import type { LocaleKey, InferTranslatorKey } from "@/types";
 import type { LocaleRef, MessagesRef } from "@/types/translator-refs";
 
-export type HasKeyOptions<M extends LocaleNamespaceMessages> = {
+export type HasKeyOptions<M> = {
   messagesRef: MessagesRef<M>;
   localeRef: LocaleRef<M>;
   key: InferTranslatorKey<M>;
