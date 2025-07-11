@@ -1,4 +1,4 @@
-import type { Locale, LocaleKey, Message, Namespace } from "@/types";
+import type { Locale, StrictLocaleKey, Message, Namespace } from "@/types";
 
 /**
  * A nested message structure or a simple string message.
@@ -88,4 +88,4 @@ export type LocaleNamespaceMessages = Record<Locale, NamespaceMessages>;
  * type Result = UnionLocaleMessages<typeof messages>;
  * // Result: { auth: { login: "Login" } } | { auth: { logout: "登出" } }
  */
-export type UnionLocaleMessages<M> = M[LocaleKey<M>];
+export type UnionLocaleMessages<M> = M[StrictLocaleKey<M>];

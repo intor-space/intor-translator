@@ -1,12 +1,12 @@
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
 import type {
+  LocaleKey,
   UnionLocaleMessages,
   Replacement,
   RichReplacement,
   NodeKeys,
   ScopedLeafKeys,
   InferTranslatorKey,
-  LocaleKey,
 } from "@/types";
 import { hasKey } from "@/translator-methods/has-key";
 import { translate } from "@/translator-methods/translate";

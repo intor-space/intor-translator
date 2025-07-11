@@ -1,4 +1,4 @@
-import type { FallbackLocalesMap, LocaleKey } from "@/types";
+import type { FallbackLocalesMap } from "@/types";
 
 /**
  * Resolve a prioritized list of locales to attempt based on a primary locale.
@@ -18,10 +18,10 @@ import type { FallbackLocalesMap, LocaleKey } from "@/types";
  * resolveLocalesToTry("zh-TW");
  * // => ["zh-TW"]
  */
-export const resolveLocalesToTry = <M>(
-  locale: LocaleKey<M>,
-  fallbackLocales?: FallbackLocalesMap<LocaleKey<M>>,
-): LocaleKey<M>[] => {
+export const resolveLocalesToTry = (
+  locale: string,
+  fallbackLocales?: FallbackLocalesMap<string>,
+): string[] => {
   const fallbacks = fallbackLocales?.[locale] || [];
   const filteredFallbacks = fallbacks.filter((l) => l !== locale);
   return [locale, ...filteredFallbacks];

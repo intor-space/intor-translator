@@ -1,7 +1,7 @@
 import type { BaseTranslatorOptions } from "@/translators/base-translator";
 import type {
-  LocaleNamespaceMessages,
   LocaleKey,
+  LocaleNamespaceMessages,
   LocaleRef,
   MessagesRef,
   InferTranslatorKey,

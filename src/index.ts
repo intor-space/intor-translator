@@ -16,6 +16,7 @@ export type {
   UnionLocaleMessages,
   // locale
   LocaleKey,
+  StrictLocaleKey,
   FallbackLocalesMap,
   // nested keys
   NodeKeys,

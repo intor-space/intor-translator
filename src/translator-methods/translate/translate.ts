@@ -1,5 +1,5 @@
 import type { TranslateOptions } from "@/translator-methods/translate";
-import type { Replacement } from "@/types";
+import type { LocaleNamespaceMessages, Replacement } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";
 import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
@@ -12,7 +12,7 @@ export const translate = <M, Result = string>({
   key,
   replacements,
 }: TranslateOptions<M>): Result => {
-  const messages = messagesRef.current;
+  const messages = messagesRef.current as LocaleNamespaceMessages;
   const locale = localeRef.current;
 
   if (!messages) {
@@ -31,7 +31,7 @@ export const translate = <M, Result = string>({
   } = translateConfig;
   const { formatMessage, onLoading, onMissing } = handlers;
 
-  const localesToTry = resolveLocalesToTry<M>(locale, fallbackLocales);
+  const localesToTry = resolveLocalesToTry(locale, fallbackLocales);
   const message = findMessageInLocales({ messages, localesToTry, key });
 
   // Check if it's loading dynamic messages

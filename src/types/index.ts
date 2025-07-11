@@ -10,7 +10,7 @@ export {
   UnionLocaleMessages,
 } from "./message-structure";
 
-export { LocaleKey, FallbackLocalesMap } from "./locale";
+export { LocaleKey, StrictLocaleKey, FallbackLocalesMap } from "./locale";
 
 export {
   NodeKeys,

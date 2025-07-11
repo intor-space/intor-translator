@@ -1,5 +1,9 @@
 import type { TranslateOptions } from "@/translator-methods/translate";
-import type { InferTranslatorKey, LocaleNamespaceMessages } from "@/types";
+import type {
+  InferTranslatorKey,
+  LocaleNamespaceMessages,
+  LocaleRef,
+} from "@/types";
 import { translate } from "@/translator-methods/translate";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";
@@ -15,16 +19,13 @@ jest.mock("@/utils/find-message-in-locales", () => ({
 }));
 
 describe("translate", () => {
-  const createBaseOptions = <
-    M extends LocaleNamespaceMessages,
-    L extends keyof M & string,
-  >(
+  const createBaseOptions = <M extends LocaleNamespaceMessages>(
     overrides: Partial<TranslateOptions<M>> = {},
   ) => {
     const messagesRef = {
       current: { en: { hello: "Hello, {name}!" } },
     } as unknown as { current: M };
-    const localeRef = { current: "en" as L };
+    const localeRef = { current: "en" } as LocaleRef<M>;
     const isLoadingRef = { current: false };
 
     const base: TranslateOptions<M> = {

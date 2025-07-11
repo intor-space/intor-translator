@@ -1,3 +1,5 @@
+import type { LocaleNamespaceMessages } from "@/types/message-structure";
+
 /**
  * Extracts the locale keys from the messages object as string literals.
  *
@@ -8,7 +10,31 @@
  * }>;
  * // Locales is "en" | "zh-TW"
  */
-export type LocaleKey<M> = keyof M & string;
+export type StrictLocaleKey<M> = keyof M & string;
+
+/**
+ * Extracts locale keys only when M is a valid messages object.
+ *
+ * When M is a concrete `LocaleNamespaceMessages`, the locale key
+ * will be inferred as a union of its top-level keys like `"en" | "zh-TW"`.
+ * Otherwise, falls back to a generic `string`.
+ *
+ * This helps retain intellisense when `messages` is provided,
+ * but avoids TypeScript errors when M is left as `unknown`.
+ *
+ * @example
+ * type Locales = LocaleKey<{
+ *   en: {};
+ *   fr: {};
+ * }>;
+ * //   → "en" | "fr"
+ *
+ * type Fallback = LocaleKey<unknown>;
+ * //   → string
+ */
+export type LocaleKey<M = unknown> = M extends LocaleNamespaceMessages
+  ? StrictLocaleKey<M>
+  : string;
 
 /**
  * A map that defines fallback locales for each base locale.

@@ -1,4 +1,4 @@
-import type { LocaleKey, InferTranslatorKey } from "@/types";
+import type { InferTranslatorKey, LocaleKey } from "@/types";
 import type { LocaleRef, MessagesRef } from "@/types/translator-refs";
 
 export type HasKeyOptions<M> = {

@@ -1,4 +1,5 @@
 import type { HasKeyOptions } from "@/translator-methods/has-key";
+import type { LocaleNamespaceMessages } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
 
@@ -9,7 +10,7 @@ export const hasKey = <M>({
   key,
   targetLocale,
 }: HasKeyOptions<M>): boolean => {
-  const messages = messagesRef.current;
+  const messages = messagesRef.current as LocaleNamespaceMessages;
   const locale = localeRef.current;
 
   if (!messages) {
@@ -20,5 +21,6 @@ export const hasKey = <M>({
   }
 
   const localesToTry = resolveLocalesToTry(targetLocale || locale);
+
   return findMessageInLocales({ messages, localesToTry, key }) ? true : false;
 };
