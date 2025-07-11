@@ -20,20 +20,35 @@ export class ScopeTranslator<
     super(options);
   }
 
-  public scoped = <
-    K extends NodeKeys<UnionLocaleMessages<M>> & string,
-    ScopedKeys extends ScopedLeafKeys<M, K> & string,
-  >(
+  // With prekey
+  public scoped<K extends NodeKeys<UnionLocaleMessages<M>> & string>(
     preKey: K,
   ): {
-    hasKey: (key?: ScopedKeys | undefined, targetLocale?: string) => boolean;
+    hasKey: (
+      key?: ScopedLeafKeys<M, K> & string,
+      targetLocale?: string,
+    ) => boolean;
     t: (
-      key?: ScopedKeys | undefined,
+      key?: ScopedLeafKeys<M, K> & string,
       replacements?: Replacement | RichReplacement,
     ) => string;
-  } => {
+  };
+
+  // Without prekey
+  public scoped(): {
+    hasKey: (
+      key?: UnionLocaleLeafKeys<M> & string,
+      targetLocale?: string,
+    ) => boolean;
+    t: (
+      key?: UnionLocaleLeafKeys<M> & string,
+      replacements?: Replacement | RichReplacement,
+    ) => string;
+  };
+
+  public scoped(preKey?: string) {
     return {
-      hasKey: (key?: ScopedKeys, targetLocale?: string): boolean => {
+      hasKey: (key?: string, targetLocale?: string): boolean => {
         const fullKey = getFullKey(preKey, key);
         return hasKey({
           messagesRef: this.messagesRef,
@@ -44,7 +59,7 @@ export class ScopeTranslator<
       },
 
       t: (
-        key?: ScopedKeys,
+        key?: string,
         replacements?: Replacement | RichReplacement,
       ): string => {
         const fullKey = getFullKey(preKey, key);
@@ -58,5 +73,5 @@ export class ScopeTranslator<
         });
       },
     };
-  };
+  }
 }
