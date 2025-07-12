@@ -30,6 +30,7 @@ export type {
   IsLoadingRef,
 } from "../src/types";
 
+// Translate Config
 export {
   TranslateConfig,
   TranslateHandlers,
