@@ -52,13 +52,13 @@ export const translate = <M, Result = string>({
   }
 
   // If no message found, handle accordingly
-  if (!message) {
+  if (message === undefined || message === null) {
     if (onMissing) {
       return onMissing({ key, locale, replacements }) as Result;
     }
 
     // Return placeholder if provided from defined config
-    if (placeholder) {
+    if (placeholder !== undefined && placeholder !== null) {
       return placeholder as Result;
     }
 
