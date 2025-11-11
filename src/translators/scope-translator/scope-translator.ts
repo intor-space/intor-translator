@@ -14,7 +14,7 @@ import { CoreTranslator } from "@/translators/core-translator";
 import { getFullKey } from "@/utils/get-full-key";
 
 export class ScopeTranslator<M = unknown> extends CoreTranslator<M> {
-  constructor(options?: CoreTranslatorOptions<M>) {
+  constructor(options: CoreTranslatorOptions<M>) {
     super(options);
   }
 

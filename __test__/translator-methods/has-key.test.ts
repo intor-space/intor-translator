@@ -39,7 +39,7 @@ describe("hasKey", () => {
     expect(() =>
       hasKey({
         messagesRef: { current: { en: { key: "value" } } },
-        localeRef: { current: undefined },
+        localeRef: { current: undefined as unknown as "en" },
         key: "key",
       }),
     ).toThrow();

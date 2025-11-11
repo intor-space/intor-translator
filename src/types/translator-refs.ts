@@ -24,7 +24,7 @@ export type MessagesRef<M> = {
  * };
  */
 export type LocaleRef<M> = {
-  current?: LocaleKey<M>;
+  current: LocaleKey<M>;
 };
 
 /**

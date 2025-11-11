@@ -11,15 +11,11 @@ import { hasKey } from "@/translator-methods/has-key";
 
 export class BaseTranslator<M = unknown> {
   protected messagesRef: MessagesRef<M> = { current: undefined };
-  protected localeRef: LocaleRef<M> = { current: undefined };
+  protected localeRef: LocaleRef<M>;
 
-  constructor(options: BaseTranslatorOptions<M> = {}) {
-    if (options.messages) {
-      this.messagesRef.current = options.messages;
-    }
-    if (options.locale) {
-      this.localeRef.current = options.locale;
-    }
+  constructor(options: BaseTranslatorOptions<M>) {
+    this.messagesRef = { current: options.messages };
+    this.localeRef = { current: options.locale };
   }
 
   /** Get all message data. */
@@ -39,7 +35,7 @@ export class BaseTranslator<M = unknown> {
   }
 
   /** Get the current active locale. */
-  public get locale(): LocaleKey<M> | undefined {
+  public get locale(): LocaleKey<M> {
     return this.localeRef.current;
   }
 
