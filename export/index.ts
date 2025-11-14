@@ -28,6 +28,7 @@ export type {
   // Keys
   NodeKeys,
   LeafKeys,
+  LocalizedNodeKeys,
   LocalizedLeafKeys,
   ScopedLeafKeys,
   // Translator refs
