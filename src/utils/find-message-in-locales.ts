@@ -1,5 +1,4 @@
 import type { LocaleNamespaceMessages } from "@/types";
-import { getValueByKey } from "@/utils/get-value-by-key";
 
 type FindMessageInLocalesOptions = {
   messages: LocaleNamespaceMessages;
@@ -35,7 +34,17 @@ export const findMessageInLocales = ({
       continue;
     }
 
-    const candidate = getValueByKey(loc, localeMessages, key);
+    let candidate: unknown = localeMessages;
+    const keys = key.split(".");
+
+    for (const k of keys) {
+      if (candidate && typeof candidate === "object" && k in candidate) {
+        candidate = (candidate as Record<string, unknown>)[k];
+      } else {
+        candidate = undefined;
+        break;
+      }
+    }
 
     if (typeof candidate === "string") {
       return candidate;

@@ -1,10 +1,6 @@
-import { clearMessageKeyCache } from "@/cache";
 import { hasKey } from "@/translator-methods/has-key";
 import { BaseTranslator } from "@/translators/base-translator";
 
-jest.mock("@/cache", () => ({
-  clearMessageKeyCache: jest.fn(),
-}));
 jest.mock("@/translator-methods/has-key", () => ({
   hasKey: jest.fn(),
 }));
@@ -36,7 +32,6 @@ describe("BaseTranslator", () => {
       translator.setMessages(newMessages);
 
       expect(translator.messages).toBe(newMessages);
-      expect(clearMessageKeyCache).toHaveBeenCalled();
     });
   });
 

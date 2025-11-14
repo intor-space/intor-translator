@@ -6,7 +6,6 @@ import type {
   MessagesRef,
   InferTranslatorKey,
 } from "@/types";
-import { clearMessageKeyCache } from "@/cache";
 import { hasKey } from "@/translator-methods/has-key";
 
 export class BaseTranslator<M = unknown> {
@@ -31,7 +30,6 @@ export class BaseTranslator<M = unknown> {
    */
   public setMessages<N extends LocaleNamespaceMessages>(messages: N) {
     this.messagesRef.current = messages as unknown as M;
-    clearMessageKeyCache();
   }
 
   /** Get the current active locale. */

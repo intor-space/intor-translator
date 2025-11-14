@@ -53,7 +53,7 @@ describe("hasKey", () => {
   });
 
   it("should return false if key does not exist", () => {
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce(undefined);
+    (findMessageInLocales as jest.Mock).mockReturnValueOnce();
 
     const result = hasKey(createBaseOptions());
     expect(result).toBe(false);
@@ -71,7 +71,7 @@ describe("hasKey", () => {
 
   it("should use targetLocale if provided and return false when key not found", () => {
     (resolveLocalesToTry as jest.Mock).mockReturnValueOnce(["en"]);
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce(undefined);
+    (findMessageInLocales as jest.Mock).mockReturnValueOnce();
 
     const result = hasKey(createBaseOptions({ targetLocale: "en" }));
 
