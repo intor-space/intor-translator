@@ -1,7 +1,7 @@
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
 import type { ScopeTranslatorMethods } from "@/translators/scope-translator/types";
 import type { Locale, Replacement } from "@/types";
-import type { LocalizedNodeKey, ScopedLeafKeys } from "@/types/nested-keys";
+import type { LocalizedNodeKey, ScopedLeafKeys } from "@/types/key";
 import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
 import { translate } from "@/translator-methods/translate";
 import { CoreTranslator } from "@/translators/core-translator";

@@ -1,1 +1,4 @@
-export { ScopeTranslator } from "./scope-translator";
+export {
+  ScopeTranslator,
+  type ScopeTranslatorMethods,
+} from "./scope-translator";

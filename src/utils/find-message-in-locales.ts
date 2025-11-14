@@ -10,6 +10,7 @@ interface FindMessageInLocalesOptions {
  * Finds the first available string message for a given key across a list of locales.
  *
  * @example
+ * ```ts
  * const messages = {
  *   en: { home: { title: "Welcome" } },
  *   zh: { home: { title: "歡迎" } },
@@ -21,6 +22,7 @@ interface FindMessageInLocalesOptions {
  *   key: "home.title",
  * });
  * // => "Welcome"
+ * ```
  */
 export const findMessageInLocales = ({
   messages,

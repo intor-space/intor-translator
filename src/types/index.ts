@@ -1,18 +1,20 @@
-export { Locale, FallbackLocalesMap } from "./locale";
+export type { Locale, FallbackLocalesMap } from "./locale";
 
-export {
+export type {
   NestedMessage,
   LocaleMessages,
-  LocalizedMessagesUnion as LocaleMessagesUnion,
+  LocalizedMessagesUnion,
 } from "./messages";
 
-export { Replacement } from "./replacement";
+export type { Replacement } from "./replacement";
 
-export {
+export type {
+  DefaultDepth,
   NodeKeys,
   LeafKeys,
+  LocalizedNodeKey,
   LocalizedLeafKey,
   ScopedLeafKeys,
-} from "./nested-keys";
+} from "./key";
 
-export { MessagesRef, LocaleRef, IsLoadingRef } from "./translator-refs";
+export type { MessagesRef, LocaleRef, IsLoadingRef } from "./translator-refs";

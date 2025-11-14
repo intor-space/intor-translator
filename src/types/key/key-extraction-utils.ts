@@ -1,0 +1,46 @@
+/**
+ * Default maximum recursive depth for nested key type computations,
+ * balancing type safety and compiler performance.
+ */
+export type DefaultDepth = 15;
+
+/** Countdown tuple for limiting recursive depth (up to 15 levels). */
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
+/**
+ * Gets all dot-separated keys (including non-leaf nodes) from a nested object.
+ *
+ * @example
+ * ```ts
+ * NodeKeys<{ a: { b: { c: string }, d: string } }> // → "a" | "a.b" | "a.b.c" | "a.d"
+ * ```
+ */
+export type NodeKeys<M, D extends number = DefaultDepth> = [D] extends [never]
+  ? never
+  : M extends object
+    ? {
+        [K in keyof M]: K extends string
+          ? `${K}` | `${K}.${NodeKeys<M[K], Prev[D]>}`
+          : never;
+      }[keyof M]
+    : never;
+
+/**
+ * Gets dot-separated keys to string leaf nodes in a nested object.
+ *
+ * @example
+ * ```ts
+ * LeafKeys<{ a: { b: { c: string }, d: string } }> // → "a.d" | "a.b.c"
+ * ```
+ */
+export type LeafKeys<M, D extends number = DefaultDepth> = [D] extends [never]
+  ? never
+  : M extends object
+    ? {
+        [K in keyof M]: M[K] extends string
+          ? `${K & string}`
+          : M[K] extends object
+            ? `${K & string}.${LeafKeys<M[K], Prev[D]>}`
+            : never;
+      }[keyof M]
+    : never;
