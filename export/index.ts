@@ -1,41 +1,34 @@
-export { ScopeTranslator as Translator } from "../src/translators";
+export {
+  ScopeTranslator,
+  ScopeTranslator as Translator, // Alias
+} from "@/translators";
 
 export type {
-  // basic
-  Locale,
-  Message,
-  Namespace,
   Replacement,
-  // rich replacement
-  RichReplacement,
   // message structure
   NestedMessage,
-  MessageRecord,
-  NamespaceMessages,
-  LocaleNamespaceMessages,
-  UnionLocaleMessages,
+  LocaleMessages,
+  LocaleMessagesUnion,
   // locale
-  LocaleKey,
-  StrictLocaleKey,
+  Locale,
   FallbackLocalesMap,
   // nested keys
   NodeKeys,
   LeafKeys,
-  UnionLocaleLeafKeys,
+  LocalizedLeafKey,
   ScopedLeafKeys,
-  InferTranslatorKey,
   // translator refs
   MessagesRef,
   LocaleRef,
   IsLoadingRef,
-} from "../src/types";
+} from "@/types";
 
 // Translate Config
 export {
   TranslateConfig,
   TranslateHandlers,
-  FormatMessage,
-  OnLoading,
-  OnMissing,
-  TranslateContext,
-} from "../src/translator-methods/translate";
+  FormatHandler,
+  LoadingHandler,
+  MissingHandler,
+  TranslateHandlerContext,
+} from "@/translator-methods/translate";

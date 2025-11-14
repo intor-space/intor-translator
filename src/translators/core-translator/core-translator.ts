@@ -1,19 +1,23 @@
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
 import type {
   Replacement,
-  RichReplacement,
   IsLoadingRef,
-  InferTranslatorKey,
+  LocalizedLeafKey,
+  Locale,
 } from "@/types";
+import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
 import { translate } from "@/translator-methods/translate";
 import { BaseTranslator } from "@/translators/base-translator";
 
-export class CoreTranslator<M = unknown> extends BaseTranslator<M> {
+export class CoreTranslator<
+  M = unknown,
+  L extends keyof M | "union" = "union",
+> extends BaseTranslator<M> {
   protected options: CoreTranslatorOptions<M>;
   protected isLoadingRef: IsLoadingRef = { current: false };
 
   constructor(options: CoreTranslatorOptions<M>) {
-    super(options);
+    super({ locale: options.locale, messages: options.messages });
     this.options = options;
   }
 
@@ -27,16 +31,29 @@ export class CoreTranslator<M = unknown> extends BaseTranslator<M> {
     this.isLoadingRef.current = state;
   }
 
-  public t = <Result = string>(
-    key: InferTranslatorKey<M>,
-    replacements?: Replacement | RichReplacement,
+  /** Check if a key exists in the specified locale or current locale. */
+  public hasKey = <K = LocalizedLeafKey<M, L>>(
+    key: K,
+    targetLocale?: Locale<M>,
+  ): boolean => {
+    return hasKeyMethod({
+      messagesRef: this.messagesRef,
+      localeRef: this.localeRef,
+      key: key as string,
+      targetLocale,
+    });
+  };
+
+  public t = <Result = string, K = LocalizedLeafKey<M, L>>(
+    key: K,
+    replacements?: Replacement,
   ): Result => {
     return translate({
       messagesRef: this.messagesRef,
       localeRef: this.localeRef,
       isLoadingRef: this.isLoadingRef,
       translateConfig: this.options,
-      key,
+      key: key as string,
       replacements,
     });
   };

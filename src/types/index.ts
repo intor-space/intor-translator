@@ -1,23 +1,18 @@
-export { Locale, Message, Namespace, Replacement } from "./basic";
-
-export { RichReplacement } from "./rich-replacement";
+export { Locale, FallbackLocalesMap } from "./locale";
 
 export {
   NestedMessage,
-  MessageRecord,
-  NamespaceMessages,
-  LocaleNamespaceMessages,
-  UnionLocaleMessages,
-} from "./message-structure";
+  LocaleMessages,
+  LocalizedMessagesUnion as LocaleMessagesUnion,
+} from "./messages";
 
-export { LocaleKey, StrictLocaleKey, FallbackLocalesMap } from "./locale";
+export { Replacement } from "./replacement";
 
 export {
   NodeKeys,
   LeafKeys,
-  UnionLocaleLeafKeys,
+  LocalizedLeafKey,
   ScopedLeafKeys,
-  InferTranslatorKey,
 } from "./nested-keys";
 
 export { MessagesRef, LocaleRef, IsLoadingRef } from "./translator-refs";

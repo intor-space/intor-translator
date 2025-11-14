@@ -10,9 +10,7 @@ export default defineConfig([
     treeshake: true,
     clean: true,
     esbuildOptions(options) {
-      options.alias = {
-        "@": path.resolve(__dirname, "src"),
-      };
+      options.alias = { "@": path.resolve(__dirname, "src") };
     },
   },
 ]);

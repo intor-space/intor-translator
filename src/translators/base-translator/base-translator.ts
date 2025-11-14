@@ -1,12 +1,5 @@
 import type { BaseTranslatorOptions } from "@/translators/base-translator";
-import type {
-  LocaleKey,
-  LocaleNamespaceMessages,
-  LocaleRef,
-  MessagesRef,
-  InferTranslatorKey,
-} from "@/types";
-import { hasKey } from "@/translator-methods/has-key";
+import type { Locale, LocaleMessages, LocaleRef, MessagesRef } from "@/types";
 
 export class BaseTranslator<M = unknown> {
   protected messagesRef: MessagesRef<M> = { current: undefined };
@@ -17,41 +10,32 @@ export class BaseTranslator<M = unknown> {
     this.localeRef = { current: options.locale };
   }
 
-  /** Get all message data. */
+  /** Get messages. */
   public get messages(): M | undefined {
     return this.messagesRef.current;
+  }
+
+  /** Get the current active locale. */
+  public get locale(): Locale<M> {
+    return this.localeRef.current;
   }
 
   /**
    * Replace messages with new ones.
    *
-   * Note: This allows runtime setting of messages even if M is inferred as `never` (uninitialized).
-   * Type cast is used to bypass TypeScript restrictions on dynamic messages.
+   * - Note: This allows runtime setting of messages even if `M` is inferred as `never`.
+   * The type cast bypasses TypeScript restrictions on dynamic messages.
    */
-  public setMessages<N extends LocaleNamespaceMessages>(messages: N) {
+  public setMessages<N extends LocaleMessages>(messages: N) {
     this.messagesRef.current = messages as unknown as M;
   }
 
-  /** Get the current active locale. */
-  public get locale(): LocaleKey<M> {
-    return this.localeRef.current;
-  }
-
-  /** Change the active locale. */
-  public setLocale(newLocale: LocaleKey<M>): void {
+  /**
+   * Set the active locale.
+   *
+   * - Note: Unlike `setMessages`, the locale structure cannot be changed at runtime.
+   */
+  public setLocale(newLocale: Locale<M>): void {
     this.localeRef.current = newLocale;
   }
-
-  /** Check if a key exists in the specified locale or current locale. */
-  public hasKey = (
-    key: InferTranslatorKey<M>,
-    targetLocale?: LocaleKey<M>,
-  ): boolean => {
-    return hasKey({
-      messagesRef: this.messagesRef,
-      localeRef: this.localeRef,
-      key,
-      targetLocale,
-    });
-  };
 }

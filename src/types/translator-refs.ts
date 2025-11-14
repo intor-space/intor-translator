@@ -1,17 +1,19 @@
-import type { LocaleKey } from "@/types";
+import type { Locale } from "@/types";
 
 /**
  * A ref object holding all localized messages by locale.
  *
  * @example
- * const messagesRef: MessagesRef<AllMessages> = {
+ * ```ts
+ * const messagesRef: MessagesRef<Messages> = {
  *   current: {
  *     en: { home: { title: "Welcome" } },
  *     zh: { home: { title: "歡迎" } }
  *   }
  * };
+ * ```
  */
-export type MessagesRef<M> = {
+export type MessagesRef<M = unknown> = {
   current?: Readonly<M>;
 };
 
@@ -19,21 +21,25 @@ export type MessagesRef<M> = {
  * A ref object holding the currently selected locale.
  *
  * @example
- * const localeRef: LocaleRef<AllMessages> = {
+ * ```ts
+ * const localeRef: LocaleRef<Messages> = {
  *   current: "en"
  * };
+ * ```
  */
-export type LocaleRef<M> = {
-  current: LocaleKey<M>;
+export type LocaleRef<M = unknown> = {
+  current: Locale<M>;
 };
 
 /**
  * A ref object indicating whether translation is loading.
  *
  * @example
+ * ```ts
  * const isLoadingRef: IsLoadingRef = {
  *   current: true
  * };
+ * ```
  */
 export type IsLoadingRef = {
   current: boolean;

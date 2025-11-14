@@ -1,9 +1,9 @@
-import type { InferTranslatorKey, LocaleKey } from "@/types";
+import type { LocalizedLeafKey, Locale } from "@/types";
 import type { LocaleRef, MessagesRef } from "@/types/translator-refs";
 
-export type HasKeyOptions<M> = {
-  messagesRef: MessagesRef<M>;
-  localeRef: LocaleRef<M>;
-  key: InferTranslatorKey<M>;
-  targetLocale?: LocaleKey<M>;
+export type HasKeyOptions = {
+  messagesRef: MessagesRef;
+  localeRef: LocaleRef;
+  key: LocalizedLeafKey;
+  targetLocale?: Locale;
 };

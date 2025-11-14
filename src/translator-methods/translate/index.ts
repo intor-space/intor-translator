@@ -5,8 +5,8 @@ export type { TranslateOptions } from "./translate-types";
 export type {
   TranslateConfig,
   TranslateHandlers,
-  FormatMessage,
-  OnLoading,
-  OnMissing,
-  TranslateContext,
+  FormatHandler,
+  LoadingHandler,
+  MissingHandler,
+  TranslateHandlerContext,
 } from "./translate-config-types";

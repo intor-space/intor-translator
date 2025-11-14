@@ -1,29 +1,10 @@
-import type {
-  LocaleKey,
-  Replacement,
-  RichReplacement,
-  ScopedLeafKeys,
-  InferTranslatorKey,
-} from "@/types";
+import type { Locale, Replacement, LocalizedLeafKey } from "@/types";
 
-export type ScopedTranslatorMethods<M, K extends string> = {
-  hasKey: (
-    key?: ScopedLeafKeys<M, K> & string,
-    targetLocale?: LocaleKey<M>,
-  ) => boolean;
-  t: (
-    key?: ScopedLeafKeys<M, K> & string,
-    replacements?: Replacement | RichReplacement,
-  ) => string;
-};
-
-export type TranslatorMethods<M> = {
-  hasKey: (
-    key?: InferTranslatorKey<M> & string,
-    targetLocale?: LocaleKey<M>,
-  ) => boolean;
-  t: (
-    key?: InferTranslatorKey<M> & string,
-    replacements?: Replacement | RichReplacement,
-  ) => string;
+export type ScopeTranslatorMethods<
+  M,
+  L extends keyof M | "union" = "union",
+  K = LocalizedLeafKey<M, L>,
+> = {
+  hasKey: (key?: K, targetLocale?: Locale<M>) => boolean;
+  t: <Result = string>(key?: K, replacements?: Replacement) => Result;
 };

@@ -1,43 +1,60 @@
-import type { FallbackLocalesMap, LocaleKey } from "@/types";
-import type { Locale, Replacement, RichReplacement } from "@/types";
+import type { FallbackLocalesMap, Locale } from "@/types";
+import type { Replacement } from "@/types";
 
-/** Config options for translation behavior. */
-export type TranslateConfig<M> = {
-  fallbackLocales?: FallbackLocalesMap<LocaleKey<M>>;
+/**
+ * Configuration options for translation behavior.
+ */
+export type TranslateConfig<M = unknown> = {
+  /** Optional mapping of fallback locales to use when a message is missing in the current locale. */
+  fallbackLocales?: FallbackLocalesMap<Locale<M>>;
+  /** Optional message to display while translations are still loading. */
   loadingMessage?: string;
+  /** Optional placeholder to use when a message cannot be found. */
   placeholder?: string;
+  /** Optional set of handler functions for customizing translation behavior. */
   handlers?: TranslateHandlers;
 };
 
-/** Optional handler functions for customizing translation behavior. */
+/**
+ * Optional handler functions for customizing translation behavior.
+ */
 export type TranslateHandlers = {
-  formatMessage?: FormatMessage;
-  onLoading?: OnLoading;
-  onMissing?: OnMissing;
+  /** Function to format a resolved message before returning it. */
+  formatHandler?: FormatHandler;
+  /** Function called when a translation is still loading. */
+  loadingHandler?: LoadingHandler;
+  /** Function called when no message is found for a given key. */
+  missingHandler?: MissingHandler;
 };
 
-/** Format a resolved message before returning it. */
-export type FormatMessage<Result = unknown> = (
-  ctx: TranslateContext & { message: string },
+/** Function to format a resolved message. */
+export type FormatHandler<Result = unknown> = (
+  ctx: TranslateHandlerContext & { message: string },
+) => Result;
+/** Function called when translation is still loading. */
+export type LoadingHandler<Result = unknown> = (
+  ctx: TranslateHandlerContext,
+) => Result;
+/** Function called when no message is found for the given key. */
+export type MissingHandler<Result = unknown> = (
+  ctx: TranslateHandlerContext,
 ) => Result;
 
-/** Called when translation is still loading. */
-export type OnLoading<Result = unknown> = (ctx: TranslateContext) => Result;
-
-/** Called when no message is found for the given key. */
-export type OnMissing<Result = unknown> = (ctx: TranslateContext) => Result;
-
 /**
- * Context passed to translation-related functions.
+ * Context object passed to translation-related functions.
+ *
  * @example
  * {
  *   locale: "en",
  *   key: "home.title",
- *   replacements: { name: "Yiming" }
+ *   replacements: { name: "John" }
  * }
  */
-export type TranslateContext = {
+export type TranslateHandlerContext = {
+  /** The current locale being translated. */
   locale: Locale;
+  /** The translation key for the message. */
   key: string;
-  replacements?: Replacement | RichReplacement;
+  /** Optional replacements for dynamic interpolation in the message. */
+  replacements?: Replacement;
 };

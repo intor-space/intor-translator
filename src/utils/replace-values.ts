@@ -1,17 +1,17 @@
-import type { Replacement } from "@/types";
-
 /**
  * Replaces placeholders in a message string with corresponding values from the given parameters.
  *
  * @example
+ * ```ts
  * const message = "Hello, {user.name}! You have {notifications.count} new messages.";
  * const params = { user: { name: "Alice" }, notifications: { count: 5 } };
  * const result = replaceValues(message, params);
  * // result: "Hello, Alice! You have 5 new messages."
+ * ```
  */
 export const replaceValues = (
   message: string,
-  params?: Replacement,
+  params?: Record<string, unknown>,
 ): string => {
   // Check if params is a valid object (excluding null and undefined)
   if (
@@ -23,18 +23,17 @@ export const replaceValues = (
   }
 
   // Deep replace
-  const replaced = message.replace(/{([^}]+)}/g, (match, key) => {
+  const replaced = message.replaceAll(/{([^}]+)}/g, (match, key) => {
     const keys = key.split(".");
-    let value: Replacement | string | number = params;
+    let value: unknown = params;
 
     for (const k of keys) {
       // If value is undefined or null, return the original match
       if (value == null || typeof value !== "object" || !(k in value)) {
         return match;
       }
-
       // Move to the next nested level
-      value = (value as Replacement)[k];
+      value = (value as Record<string, unknown>)[k];
     }
 
     return typeof value === "string" || typeof value === "number"

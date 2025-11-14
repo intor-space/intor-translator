@@ -1,26 +1,23 @@
 import type { HasKeyOptions } from "@/translator-methods/has-key";
-import type { LocaleNamespaceMessages } from "@/types";
+import type { LocaleMessages } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
-import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
+import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
 
 /** Check if a key exists in the specified locale or current locale. */
-export const hasKey = <M>({
+export const hasKey = ({
   messagesRef,
   localeRef,
   key,
   targetLocale,
-}: HasKeyOptions<M>): boolean => {
-  const messages = messagesRef.current as LocaleNamespaceMessages;
+}: HasKeyOptions): boolean => {
+  const messages = messagesRef.current as LocaleMessages;
   const locale = localeRef.current;
 
   if (!messages) {
     throw new Error("[intor-translator] 'messages' is required");
   }
-  if (!locale) {
-    throw new Error("[intor-translator] 'locale' is required");
-  }
 
-  const localesToTry = resolveLocalesToTry(targetLocale || locale);
-
-  return findMessageInLocales({ messages, localesToTry, key }) ? true : false;
+  const candidateLocales = resolveCandidateLocales(targetLocale || locale);
+  const message = findMessageInLocales({ messages, candidateLocales, key });
+  return !!message;
 };

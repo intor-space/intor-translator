@@ -1,79 +1,59 @@
 import type { TranslateOptions } from "@/translator-methods/translate";
-import type { LocaleNamespaceMessages, Replacement } from "@/types";
+import type { Replacement } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";
-import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
+import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
 
-export const translate = <M, Result = string>({
+/**
+ * Attempts to resolve the most suitable message for the given locale chain, applying fallbacks,
+ * formatting handlers, and value replacements.
+ */
+export const translate = <Result = string>({
   messagesRef,
   localeRef,
   isLoadingRef,
   translateConfig,
   key,
   replacements,
-}: TranslateOptions<M>): Result => {
-  const messages = messagesRef.current as LocaleNamespaceMessages;
+}: TranslateOptions): Result => {
+  const messages = messagesRef.current;
   const locale = localeRef.current;
+  const isLoading = isLoadingRef.current;
 
   if (!messages) {
     throw new Error("[intor-translator] 'messages' is required");
   }
-  if (!locale) {
-    throw new Error("[intor-translator] 'locale' is required");
+
+  const { fallbackLocales, loadingMessage, placeholder, handlers } =
+    translateConfig;
+  const { formatHandler, loadingHandler, missingHandler } = handlers || {};
+
+  const candidateLocales = resolveCandidateLocales(locale, fallbackLocales);
+  const message = findMessageInLocales({ messages, candidateLocales, key });
+
+  // Loading state handling: return loading handler or static loading message if provided.
+  if (isLoading && (loadingHandler || loadingMessage)) {
+    if (loadingHandler)
+      return loadingHandler({ key, locale, replacements }) as Result;
+    if (loadingMessage) return loadingMessage as Result;
   }
 
-  const isLoading = isLoadingRef.current;
-  const {
-    fallbackLocales,
-    loadingMessage,
-    placeholder,
-    handlers = {},
-  } = translateConfig;
-  const { formatMessage, onLoading, onMissing } = handlers;
-
-  const localesToTry = resolveLocalesToTry(locale, fallbackLocales);
-  const message = findMessageInLocales({ messages, localesToTry, key });
-
-  // Check if it's loading dynamic messages
-  if (isLoading) {
-    // Handle loading state with provided handler or fallback message
-    if (onLoading) {
-      return onLoading({
-        key,
-        locale,
-        replacements,
-      }) as Result;
-    }
-
-    // Return loadingMessage if provided from defined config
-    if (loadingMessage) {
-      return loadingMessage as Result;
-    }
-  }
-
-  // If no message found, handle accordingly
-  if (message === undefined || message === null) {
-    if (onMissing) {
-      return onMissing({ key, locale, replacements }) as Result;
-    }
-
-    // Return placeholder if provided from defined config
-    if (placeholder !== undefined && placeholder !== null) {
-      return placeholder as Result;
-    }
-
-    // Return the key if no message is found
+  // Missing message handling: custom handler, placeholder, or fallback to the key itself.
+  if (message === undefined) {
+    if (missingHandler)
+      return missingHandler({ key, locale, replacements }) as Result;
+    if (placeholder) return placeholder as Result;
     return key as Result;
   }
 
-  // If a message is found, apply message formatter or replace values (Rich replacement)
-  if (formatMessage) {
-    return formatMessage({ message, key, locale, replacements }) as Result;
+  // Rich formatting: fully delegates message formatting to the custom handler,
+  // allowing advanced rendering or rich replacements.
+  if (formatHandler) {
+    return formatHandler({ message, key, locale, replacements }) as Result;
   }
-  // Apply replacements if provided (Basic replacement)
-  else {
-    return replacements
-      ? (replaceValues(message, replacements as Replacement) as Result)
-      : (message as Result);
-  }
+
+  // Basic formatting: apply simple value replacements when available.
+  return replacements
+    ? (replaceValues(message, replacements as Replacement) as Result)
+    : (message as Result);
 };
