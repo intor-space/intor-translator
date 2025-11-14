@@ -1,74 +1,73 @@
-import { translate } from "@/translator-methods/translate";
-import { CoreTranslator } from "@/translators/core-translator";
+import type { CoreTranslatorOptions } from "@/translators/core-translator";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import * as hasKeyModule from "@/translator-methods/has-key";
+import * as translateModule from "@/translator-methods/translate";
+import { CoreTranslator } from "@/translators/core-translator/core-translator";
 
-jest.mock("@/translator-methods/translate", () => ({
-  translate: jest.fn(),
-}));
-
-const messages = {
-  en: { common: { welcome: "Welcome" } },
-  "zh-TW": { common: { welcome: "歡迎" } },
-};
+vi.mock("@/translator-methods/has-key");
+vi.mock("@/translator-methods/translate");
 
 describe("CoreTranslator", () => {
-  it("should initialize with locale and messages", () => {
-    const translator = new CoreTranslator({
-      locale: "en",
-      messages,
-      loadingMessage: "Loading...",
-      placeholder: "N/A",
-      fallbackLocales: {},
-    });
+  const messages = { en: { hello: "Hello" }, zh: { hello: "你好" } };
+  const locale = "en";
 
-    expect(translator.locale).toBe("en");
+  const options: CoreTranslatorOptions<typeof messages> = {
+    messages,
+    locale,
+  };
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it("should initialize with given messages and locale", () => {
+    const translator = new CoreTranslator(options);
     expect(translator.messages).toEqual(messages);
+    expect(translator.locale).toBe(locale);
     expect(translator.isLoading).toBe(false);
   });
 
-  describe("setLoading()", () => {
-    it("should allow changing loading state", () => {
-      const translator = new CoreTranslator({
-        locale: "en",
-        messages,
-        loadingMessage: "Loading...",
-        placeholder: "N/A",
-        fallbackLocales: {},
-      });
+  it("should set and get loading state", () => {
+    const translator = new CoreTranslator(options);
+    translator.setLoading(true);
+    expect(translator.isLoading).toBe(true);
+    translator.setLoading(false);
+    expect(translator.isLoading).toBe(false);
+  });
 
-      expect(translator.isLoading).toBe(false);
-      translator.setLoading(true);
-      expect(translator.isLoading).toBe(true);
+  it("hasKey should call hasKeyMethod with correct arguments", () => {
+    const translator = new CoreTranslator(options);
+    const key = "hello";
+    const targetLocale = "zh";
+    const spy = vi.mocked(hasKeyModule.hasKey).mockReturnValue(true);
+
+    const result = translator.hasKey(key, targetLocale);
+    expect(result).toBe(true);
+    expect(spy).toHaveBeenCalledWith({
+      messagesRef: translator["messagesRef"],
+      localeRef: translator["localeRef"],
+      key,
+      targetLocale,
     });
   });
 
-  describe("t()", () => {
-    it("should call translate with correct arguments", () => {
-      const mockTranslate = translate as jest.Mock;
-      mockTranslate.mockReturnValue("Translated!");
+  it("t should call translate with correct arguments and return result", () => {
+    const translator = new CoreTranslator(options);
+    const key = "hello";
+    const replacements = { name: "Yiming" };
+    const spy = vi
+      .mocked(translateModule.translate)
+      .mockReturnValue("Hello Yiming");
 
-      const translator = new CoreTranslator({
-        locale: "en",
-        messages,
-        loadingMessage: "Loading...",
-        placeholder: "N/A",
-        fallbackLocales: {},
-      });
-
-      const result = translator.t("common.welcome", { name: "Yiming" });
-
-      expect(result).toBe("Translated!");
-      expect(mockTranslate).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key: "common.welcome",
-          replacements: { name: "Yiming" },
-          localeRef: { current: "en" },
-          messagesRef: { current: messages },
-          isLoadingRef: { current: false },
-          translateConfig: expect.objectContaining({
-            placeholder: "N/A",
-          }),
-        }),
-      );
+    const result = translator.t(key, replacements);
+    expect(result).toBe("Hello Yiming");
+    expect(spy).toHaveBeenCalledWith({
+      messagesRef: translator["messagesRef"],
+      localeRef: translator["localeRef"],
+      isLoadingRef: translator["isLoadingRef"],
+      translateConfig: options,
+      key,
+      replacements,
     });
   });
 });

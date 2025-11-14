@@ -6,9 +6,11 @@
     "moduleResolution": "bundler",
     "strict": true,
     "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["vitest/globals"]
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": [

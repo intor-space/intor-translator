@@ -21,7 +21,7 @@ describe("findMessageInLocales", () => {
   it("should find message in the first locale", () => {
     const result = findMessageInLocales({
       messages,
-      localesToTry: ["en", "fr"],
+      candidateLocales: ["en", "fr"],
       key: "auth.login.title",
     });
     expect(result).toBe("Login");
@@ -30,7 +30,7 @@ describe("findMessageInLocales", () => {
   it("should find message in the fallback locale", () => {
     const result = findMessageInLocales({
       messages,
-      localesToTry: ["de" as "en", "fr"],
+      candidateLocales: ["de" as "en", "fr"],
       key: "auth.login.title",
     });
     expect(result).toBe("Connexion");
@@ -39,7 +39,7 @@ describe("findMessageInLocales", () => {
   it("should return undefined if message does not exist in any locale", () => {
     const result = findMessageInLocales({
       messages,
-      localesToTry: ["en", "fr"],
+      candidateLocales: ["en", "fr"],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       key: "auth.logout.title" as any,
     });

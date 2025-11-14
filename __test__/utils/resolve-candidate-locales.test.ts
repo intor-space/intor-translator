@@ -1,5 +1,5 @@
 import type { FallbackLocalesMap } from "@/types";
-import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
+import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
 
 export const mockFallbackLocales: FallbackLocalesMap = {
   "en-US": ["fr-FR", "zh-TW"],
@@ -8,14 +8,14 @@ export const mockFallbackLocales: FallbackLocalesMap = {
   "ja-JP": [],
 };
 
-describe("resolveLocalesToTry", () => {
+describe("resolveCandidateLocales", () => {
   it("returns primary locale first without fallback", () => {
-    const result = resolveLocalesToTry("ja-JP", mockFallbackLocales);
+    const result = resolveCandidateLocales("ja-JP", mockFallbackLocales);
     expect(result).toEqual(["ja-JP"]);
   });
 
   it("returns primary locale followed by fallbacks", () => {
-    const result = resolveLocalesToTry("en-US", mockFallbackLocales);
+    const result = resolveCandidateLocales("en-US", mockFallbackLocales);
     expect(result).toEqual(["en-US", "fr-FR", "zh-TW"]);
   });
 
@@ -27,7 +27,7 @@ describe("resolveLocalesToTry", () => {
       "ja-JP": ["ja-JP"],
     };
 
-    const result = resolveLocalesToTry("en-US", customFallbackLocales);
+    const result = resolveCandidateLocales("en-US", customFallbackLocales);
     expect(result).toEqual(["en-US", "fr-FR", "zh-TW"]);
   });
 
@@ -39,12 +39,12 @@ describe("resolveLocalesToTry", () => {
       "ja-JP": [],
     };
 
-    const result = resolveLocalesToTry("zh-TW", emptyFallbackLocales);
+    const result = resolveCandidateLocales("zh-TW", emptyFallbackLocales);
     expect(result).toEqual(["zh-TW"]);
   });
 
   it("handles undefined fallbackLocales safely", () => {
-    const result = resolveLocalesToTry("fr-FR", {} as FallbackLocalesMap);
+    const result = resolveCandidateLocales("fr-FR", {} as FallbackLocalesMap);
     expect(result).toEqual(["fr-FR"]);
   });
 });

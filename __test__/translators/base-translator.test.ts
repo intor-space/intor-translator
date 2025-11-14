@@ -1,81 +1,69 @@
-import { hasKey } from "@/translator-methods/has-key";
-import { BaseTranslator } from "@/translators/base-translator";
-
-jest.mock("@/translator-methods/has-key", () => ({
-  hasKey: jest.fn(),
-}));
-
-const messages = {
-  en: { greeting: "Hello", nested: { message: "Nested!" } },
-  zh: { greeting: "哈囉" },
-};
+import { describe, it, expect } from "vitest";
+import { BaseTranslator } from "@/translators/base-translator/base-translator";
 
 describe("BaseTranslator", () => {
-  describe("constructor()", () => {
-    it("should initialize with messages and locale", () => {
-      const translator = new BaseTranslator({ messages, locale: "en" });
-      expect(translator.locale).toBe("en");
-      expect(translator.messages).toEqual(messages);
+  const messages = {
+    en: { hello: "Hello" },
+    zh: { hello: "你好" },
+  };
+
+  it("should initialize with given messages and locale", () => {
+    const translator = new BaseTranslator({
+      messages,
+      locale: "en",
     });
+
+    expect(translator.messages).toEqual(messages);
+    expect(translator.locale).toBe("en");
   });
 
-  describe("setMessages()", () => {
-    it("should replace messages and clear key cache", () => {
-      const newMessages = {
-        en: { greeting: "Hi there", nested: { message: "Nested!" } },
-        zh: { greeting: "你好" },
-      };
-
-      const translator = new BaseTranslator({ messages, locale: "en" });
-      expect(translator.messages).toBe(messages);
-
-      translator.setMessages(newMessages);
-
-      expect(translator.messages).toBe(newMessages);
+  it("should return undefined if no messages provided", () => {
+    const translator = new BaseTranslator({
+      messages: undefined,
+      locale: "en",
     });
+
+    expect(translator.messages).toBeUndefined();
+    expect(translator.locale).toBe("en");
   });
 
-  describe("setLocale()", () => {
-    it("should return true when setting a valid locale", () => {
-      const translator = new BaseTranslator({ messages, locale: "en" });
-      translator.setLocale("zh");
-      expect(translator.locale).toBe("zh");
+  it("should update messages using setMessages", () => {
+    const translator = new BaseTranslator({
+      messages: { en: { hello: "" }, zh: { hello: "" } },
+      locale: "en",
     });
+
+    const newMessages = {
+      en: { hello: "Hello Updated" },
+      zh: { hello: "你好更新" },
+    };
+
+    translator.setMessages(newMessages);
+    expect(translator.messages).toEqual(newMessages);
   });
 
-  describe("hasKey()", () => {
-    it("should delegate hasKey to imported hasKey function", () => {
-      const mockHasKey = hasKey as jest.Mock;
-      mockHasKey.mockReturnValue(true);
-
-      const translator = new BaseTranslator({ messages, locale: "en" });
-      const result = translator.hasKey("greeting");
-
-      expect(result).toBe(true);
-      expect(mockHasKey).toHaveBeenCalledWith(
-        expect.objectContaining({
-          messagesRef: { current: messages },
-          localeRef: { current: "en" },
-          key: "greeting",
-          targetLocale: undefined,
-        }),
-      );
+  it("should update locale using setLocale", () => {
+    const translator = new BaseTranslator({
+      messages,
+      locale: "en",
     });
 
-    it("should pass targetLocale when provided", () => {
-      const mockHasKey = hasKey as jest.Mock;
-      mockHasKey.mockReturnValue(false);
+    translator.setLocale("zh");
+    expect(translator.locale).toBe("zh");
+  });
 
-      const translator = new BaseTranslator({ messages, locale: "en" });
-      const result = translator.hasKey("greeting", "zh");
-
-      expect(result).toBe(false);
-      expect(mockHasKey).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key: "greeting",
-          targetLocale: "zh",
-        }),
-      );
+  it("should allow setting messages of any compatible shape", () => {
+    const translator = new BaseTranslator({
+      messages: messages,
+      locale: "en",
     });
+
+    // 使用 setMessages 強制覆蓋型別
+    const overrideMessages = {
+      en: { hello: "Override" },
+      zh: { hello: "覆蓋" },
+    };
+    translator.setMessages(overrideMessages);
+    expect(translator.messages).toEqual(overrideMessages);
   });
 });

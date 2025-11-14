@@ -6,7 +6,7 @@ describe("getFullKey", () => {
   });
 
   it("should return preKey if key is undefined", () => {
-    expect(getFullKey("home", undefined)).toBe("home");
+    expect(getFullKey("home")).toBe("home");
   });
 
   it("should concatenate preKey and key with dot", () => {

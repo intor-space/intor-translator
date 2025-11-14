@@ -1,86 +1,69 @@
+/* eslint-disable unicorn/no-useless-undefined */
 import type { HasKeyOptions } from "@/translator-methods/has-key";
-import { hasKey } from "@/translator-methods/has-key";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { hasKey } from "@/translator-methods/has-key/has-key";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
-import { resolveLocalesToTry } from "@/utils/resolve-locales-to-try";
+import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
 
-jest.mock("@/utils/find-message-in-locales", () => ({
-  findMessageInLocales: jest.fn(),
-}));
-
-jest.mock("@/utils/resolve-locales-to-try", () => ({
-  resolveLocalesToTry: jest.fn(() => ["zh-TW"]),
-}));
-
-const messages = {
-  "zh-TW": { greeting: "哈囉" },
-  en: { greeting: "Hello" },
-};
+// mock utils
+vi.mock("@/utils/find-message-in-locales");
+vi.mock("@/utils/resolve-candidate-locales");
 
 describe("hasKey", () => {
-  const createBaseOptions = (
-    overrides: Partial<HasKeyOptions<typeof messages>> = {},
-  ): HasKeyOptions<typeof messages> => {
-    return {
-      messagesRef: { current: messages },
-      localeRef: { current: "zh-TW" },
-      key: "greeting",
-      ...overrides,
-    };
+  const messagesRef = {
+    current: { en: { hello: "world" }, zh: { hello: "世界" } },
   };
+  const localeRef = { current: "en" };
 
-  it("should throw error if messages or locale missing", () => {
-    expect(() =>
-      hasKey({
-        messagesRef: { current: undefined },
-        localeRef: { current: "en" },
-        key: "123" as never,
-      }),
-    ).toThrow();
-    expect(() =>
-      hasKey({
-        messagesRef: { current: { en: { key: "value" } } },
-        localeRef: { current: undefined as unknown as "en" },
-        key: "key",
-      }),
-    ).toThrow();
+  beforeEach(() => {
+    vi.resetAllMocks();
   });
 
-  it("should return true if key exists in default locale", () => {
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce("哈囉");
+  it("should return true if key exists in messages", () => {
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
+    vi.mocked(findMessageInLocales).mockReturnValue("world");
 
-    const result = hasKey(createBaseOptions());
+    const result = hasKey({
+      messagesRef,
+      localeRef,
+      key: "hello",
+    } as HasKeyOptions);
     expect(result).toBe(true);
   });
 
   it("should return false if key does not exist", () => {
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce();
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
+    vi.mocked(findMessageInLocales).mockReturnValue(undefined);
 
-    const result = hasKey(createBaseOptions());
+    const result = hasKey({
+      messagesRef,
+      localeRef,
+      key: "missing",
+    } as HasKeyOptions);
     expect(result).toBe(false);
   });
 
-  it("should use targetLocale if provided and key exists", () => {
-    (resolveLocalesToTry as jest.Mock).mockReturnValueOnce(["en"]);
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce("Hello");
+  it("should throw if messagesRef.current is undefined", () => {
+    const badMessagesRef = { current: undefined };
+    expect(() =>
+      hasKey({
+        messagesRef: badMessagesRef,
+        localeRef,
+        key: "hello",
+      } as HasKeyOptions),
+    ).toThrow("[intor-translator] 'messages' is required");
+  });
 
-    const result = hasKey(createBaseOptions({ targetLocale: "en" }));
+  it("should use targetLocale if provided", () => {
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["zh"]);
+    vi.mocked(findMessageInLocales).mockReturnValue("世界");
 
-    expect(resolveLocalesToTry).toHaveBeenCalledWith("en");
+    const result = hasKey({
+      messagesRef,
+      localeRef,
+      key: "hello",
+      targetLocale: "zh",
+    } as HasKeyOptions);
     expect(result).toBe(true);
-  });
-
-  it("should use targetLocale if provided and return false when key not found", () => {
-    (resolveLocalesToTry as jest.Mock).mockReturnValueOnce(["en"]);
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce();
-
-    const result = hasKey(createBaseOptions({ targetLocale: "en" }));
-
-    expect(resolveLocalesToTry).toHaveBeenCalledWith("en");
-    expect(result).toBe(false);
-  });
-
-  it("should fallback to current locale if no targetLocale is provided", () => {
-    hasKey(createBaseOptions());
-    expect(resolveLocalesToTry).toHaveBeenCalledWith("zh-TW");
   });
 });

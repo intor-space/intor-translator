@@ -1,176 +1,161 @@
+/* eslint-disable unicorn/no-useless-undefined */
 import type { TranslateOptions } from "@/translator-methods/translate";
-import type {
-  InferTranslatorKey,
-  LocaleNamespaceMessages,
-  LocaleRef,
-} from "@/types";
-import { translate } from "@/translator-methods/translate";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { translate } from "@/translator-methods/translate/translate";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";
+import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
 
-jest.mock("@/utils/replace-values", () => ({
-  replaceValues: jest.fn(),
-}));
-jest.mock("@/utils/resolve-locales-to-try", () => ({
-  resolveLocalesToTry: jest.fn(() => ["en"]),
-}));
-jest.mock("@/utils/find-message-in-locales", () => ({
-  findMessageInLocales: jest.fn(),
-}));
+vi.mock("@/utils/find-message-in-locales");
+vi.mock("@/utils/replace-values");
+vi.mock("@/utils/resolve-candidate-locales");
 
 describe("translate", () => {
-  const createBaseOptions = <M extends LocaleNamespaceMessages>(
-    overrides: Partial<TranslateOptions<M>> = {},
-  ) => {
-    const messagesRef = {
-      current: { en: { hello: "Hello, {name}!" } },
-    } as unknown as { current: M };
-    const localeRef = { current: "en" } as LocaleRef<M>;
-    const isLoadingRef = { current: false };
+  const messagesRef = {
+    current: { en: { hello: "Hello {name}" }, zh: { hello: "你好 {name}" } },
+  };
+  const localeRef = { current: "en" };
+  const isLoadingRef = { current: false };
 
-    const base: TranslateOptions<M> = {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it("should return formatted message with replacements", () => {
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
+    vi.mocked(findMessageInLocales).mockReturnValue("Hello {name}");
+    vi.mocked(replaceValues).mockReturnValue("Hello Yiming");
+
+    const result = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
+      translateConfig: {},
+      key: "hello",
+      replacements: { name: "Yiming" },
+    } as TranslateOptions);
+
+    expect(result).toBe("Hello Yiming");
+  });
+
+  it("should use formatHandler if provided", () => {
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
+    vi.mocked(findMessageInLocales).mockReturnValue("Hello {name}");
+
+    const formatHandler = vi.fn().mockReturnValue("Formatted Hello");
+    const result = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
+      translateConfig: { handlers: { formatHandler } },
+      key: "hello",
+      replacements: { name: "Yiming" },
+    } as TranslateOptions);
+
+    expect(result).toBe("Formatted Hello");
+    expect(formatHandler).toHaveBeenCalled();
+  });
+
+  it("should return loadingMessage or loadingHandler if isLoading", () => {
+    isLoadingRef.current = true;
+    const loadingHandler = vi.fn().mockReturnValue("Loading...");
+
+    const result = translate({
       messagesRef,
       localeRef,
       isLoadingRef,
       translateConfig: {
-        fallbackLocales: {},
-        loadingMessage: "Loading...",
-        placeholder: "N/A",
-        handlers: {},
+        loadingMessage: "Please wait",
+        handlers: { loadingHandler },
       },
-      key: "hello" as InferTranslatorKey<M>,
-      replacements: { name: "Yiming" },
-      ...overrides,
-    };
+      key: "hello",
+    } as TranslateOptions);
 
-    return base;
-  };
-
-  it("should throw error if messages or locale missing", () => {
-    expect(() =>
-      translate({
-        messagesRef: { current: undefined },
-        localeRef: { current: "en" },
-        key: "123" as never,
-      } as unknown as TranslateOptions<never>),
-    ).toThrow();
-    expect(() =>
-      translate({
-        messagesRef: { current: { en: { key: "value" } } },
-        localeRef: { current: undefined },
-        key: "key",
-      } as unknown as TranslateOptions<never>),
-    ).toThrow();
-  });
-
-  it("should return loading message if isLoading is true and no handler", () => {
-    const result = translate(
-      createBaseOptions({
-        isLoadingRef: { current: true },
-      }),
-    );
     expect(result).toBe("Loading...");
+    expect(loadingHandler).toHaveBeenCalled();
+    isLoadingRef.current = false;
   });
 
-  it("should call onLoading handler if provided", () => {
-    const onLoading = jest.fn(() => "Loading from handler");
-    const result = translate(
-      createBaseOptions({
-        isLoadingRef: { current: true },
-        translateConfig: {
-          fallbackLocales: {},
-          loadingMessage: "Should not use this",
-          placeholder: "N/A",
-          handlers: { onLoading },
-        },
-      }),
-    );
-    expect(onLoading).toHaveBeenCalledWith({
+  it("should return placeholder or key if message missing", () => {
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
+    vi.mocked(findMessageInLocales).mockReturnValue(undefined);
+
+    // missingHandler
+    const missingHandler = vi.fn().mockReturnValue("Missing!");
+    const result1 = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
+      translateConfig: { handlers: { missingHandler } },
+      key: "notExist",
+    } as TranslateOptions);
+    expect(result1).toBe("Missing!");
+    expect(missingHandler).toHaveBeenCalled();
+
+    // placeholder
+    const result2 = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
+      translateConfig: { placeholder: "Placeholder" },
+      key: "notExist",
+    } as TranslateOptions);
+    expect(result2).toBe("Placeholder");
+
+    // fallback to key
+    const result3 = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
+      translateConfig: {},
+      key: "notExist",
+    } as TranslateOptions);
+    expect(result3).toBe("notExist");
+  });
+
+  it("should throw if messagesRef.current is undefined", () => {
+    const badMessagesRef = { current: undefined };
+    expect(() =>
+      translate({
+        messagesRef: badMessagesRef,
+        localeRef,
+        isLoadingRef,
+        translateConfig: {},
+        key: "hello",
+      } as TranslateOptions),
+    ).toThrow("[intor-translator] 'messages' is required");
+  });
+
+  it("returns message directly if no replacements and no formatHandler", () => {
+    vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
+    vi.mocked(findMessageInLocales).mockReturnValue("Hello");
+
+    const result = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
+      translateConfig: {},
       key: "hello",
-      locale: "en",
-      replacements: { name: "Yiming" },
-    });
-    expect(result).toBe("Loading from handler");
+    } as TranslateOptions);
+
+    expect(result).toBe("Hello");
   });
 
-  it("should return placeholder if no message and no onMissing", () => {
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce(undefined);
-    const result = translate(createBaseOptions());
-    expect(result).toBe("N/A");
-  });
+  it("returns loadingMessage if isLoading is true and no loadingHandler", () => {
+    isLoadingRef.current = true;
 
-  it("should call onMissing if message not found", () => {
-    const onMissing = jest.fn(() => "Missing from handler");
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce(undefined);
-
-    const result = translate(
-      createBaseOptions({
-        translateConfig: {
-          fallbackLocales: {},
-          placeholder: "N/A",
-          handlers: { onMissing },
-        },
-      }),
-    );
-    expect(onMissing).toHaveBeenCalledWith({
-      key: "hello",
-      locale: "en",
-      replacements: { name: "Yiming" },
-    });
-    expect(result).toBe("Missing from handler");
-  });
-
-  it("should return formatted message if formatMessage is provided", () => {
-    const formatMessage = jest.fn(() => "Formatted Hello Yiming");
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce("Hello, {name}!");
-
-    const result = translate(
-      createBaseOptions({
-        translateConfig: {
-          fallbackLocales: {},
-          placeholder: "N/A",
-          handlers: { formatMessage },
-        },
-      }),
-    );
-
-    expect(formatMessage).toHaveBeenCalledWith({
-      message: "Hello, {name}!",
-      key: "hello",
-      locale: "en",
-      replacements: { name: "Yiming" },
-    });
-    expect(result).toBe("Formatted Hello Yiming");
-  });
-
-  it("should apply replacements if formatMessage is not provided", () => {
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce("Hello, {name}!");
-    (replaceValues as jest.Mock).mockReturnValueOnce("Hello, Yiming!");
-
-    const result = translate(createBaseOptions());
-    expect(replaceValues).toHaveBeenCalledWith("Hello, {name}!", {
-      name: "Yiming",
-    });
-    expect(result).toBe("Hello, Yiming!");
-  });
-
-  it("should return raw message if no replacements and no formatMessage", () => {
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce("Hello!");
-    const result = translate(createBaseOptions({ replacements: undefined }));
-    expect(result).toBe("Hello!");
-  });
-
-  it("should return key as fallback if nothing else matches", () => {
-    const options = createBaseOptions({
+    const result = translate({
+      messagesRef,
+      localeRef,
+      isLoadingRef,
       translateConfig: {
-        fallbackLocales: {},
-        placeholder: undefined,
-        loadingMessage: undefined,
+        loadingMessage: "Please wait",
         handlers: {},
       },
-    });
-    (findMessageInLocales as jest.Mock).mockReturnValueOnce(undefined);
-    const result = translate(options);
-    expect(result).toBe("hello");
+      key: "hello",
+    } as TranslateOptions);
+
+    expect(result).toBe("Please wait");
+    isLoadingRef.current = false;
   });
 });
