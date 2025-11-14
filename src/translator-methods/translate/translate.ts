@@ -1,4 +1,4 @@
-import type { TranslateOptions } from "@/translator-methods/translate";
+import type { TranslateOptions } from "./types";
 import type { Replacement } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { replaceValues } from "@/utils/replace-values";

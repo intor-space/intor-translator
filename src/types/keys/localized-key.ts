@@ -2,7 +2,7 @@ import type {
   DefaultDepth,
   LeafKeys,
   NodeKeys,
-} from "@/types/key/key-extraction-utils";
+} from "@/types/keys/key-extraction-utils";
 import type {
   LocaleMessages,
   LocalizedMessagesUnion,
@@ -21,17 +21,17 @@ import type {
  * };
  *
  * // 1. Union of all locales
- * LocalizedNodeKey<typeof messages> // → "greeting" | "greeting.morning" | "greeting.evening"
+ * LocalizedNodeKeys<typeof messages> // → "greeting" | "greeting.morning" | "greeting.evening"
  *
  * // 2. For a specified locale
- * LocalizedNodeKey<typeof messages, "en"> // → "greeting" | "greeting.morning"
- * LocalizedNodeKey<typeof messages, "zh"> // → "greeting" | "greeting.evening"
+ * LocalizedNodeKeys<typeof messages, "en"> // → "greeting" | "greeting.morning"
+ * LocalizedNodeKeys<typeof messages, "zh"> // → "greeting" | "greeting.evening"
  *
  * // 3. Fallback when M is not LocaleMessages
- * LocalizedNodeKey // → string
+ * LocalizedNodeKeys // → string
  * ```
  */
-export type LocalizedNodeKey<
+export type LocalizedNodeKeys<
   M = unknown,
   L extends keyof M | "union" = "union",
   D extends number = DefaultDepth,
@@ -53,17 +53,17 @@ export type LocalizedNodeKey<
  * };
  *
  * // 1. Union of all locales
- * LocalizedLeafKey<typeof messages> // → "greeting.morning" | "greeting.evening"
+ * LocalizedLeafKeys<typeof messages> // → "greeting.morning" | "greeting.evening"
  *
  * // 2. For a specified locale
- * LocalizedLeafKey<typeof messages, "en"> // → "greeting.morning"
- * LocalizedLeafKey<typeof messages, "zh"> // → "greeting.evening"
+ * LocalizedLeafKeys<typeof messages, "en"> // → "greeting.morning"
+ * LocalizedLeafKeys<typeof messages, "zh"> // → "greeting.evening"
  *
  * // 3. Fallback if M is not LocaleMessages
- * LocalizedLeafKey // → string
+ * LocalizedLeafKeys // → string
  * ```
  */
-export type LocalizedLeafKey<
+export type LocalizedLeafKeys<
   M = unknown,
   L extends keyof M | "union" = "union",
   D extends number = DefaultDepth,

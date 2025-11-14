@@ -1,7 +1,4 @@
 export { translate } from "./translate";
-
-export type { TranslateOptions } from "./translate-types";
-
 export type {
   TranslateConfig,
   TranslateHandlers,
@@ -9,4 +6,4 @@ export type {
   LoadingHandler,
   MissingHandler,
   TranslateHandlerContext,
-} from "./translate-config-types";
+} from "./translate-config.types";

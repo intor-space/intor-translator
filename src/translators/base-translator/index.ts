@@ -1,3 +1,2 @@
-export type { BaseTranslatorOptions } from "./base-translator-types";
-
+export type { BaseTranslatorOptions } from "./types";
 export { BaseTranslator } from "./base-translator";

@@ -1,4 +1,4 @@
-import type { DefaultDepth, LeafKeys } from "@/types/key/key-extraction-utils";
+import type { DefaultDepth, LeafKeys } from "@/types/keys/key-extraction-utils";
 import type {
   LocaleMessages,
   LocalizedMessagesUnion,

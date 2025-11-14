@@ -12,9 +12,9 @@ export type {
   DefaultDepth,
   NodeKeys,
   LeafKeys,
-  LocalizedNodeKey,
-  LocalizedLeafKey,
+  LocalizedNodeKeys,
+  LocalizedLeafKeys,
   ScopedLeafKeys,
-} from "./key";
+} from "./keys";
 
 export type { MessagesRef, LocaleRef, IsLoadingRef } from "./translator-refs";

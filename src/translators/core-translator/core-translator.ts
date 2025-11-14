@@ -1,8 +1,8 @@
-import type { CoreTranslatorOptions } from "@/translators/core-translator";
+import type { CoreTranslatorOptions } from "./types";
 import type {
   Replacement,
   IsLoadingRef,
-  LocalizedLeafKey,
+  LocalizedLeafKeys,
   Locale,
 } from "@/types";
 import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
@@ -32,7 +32,7 @@ export class CoreTranslator<
   }
 
   /** Check if a key exists in the specified locale or current locale. */
-  public hasKey = <K = LocalizedLeafKey<M, L>>(
+  public hasKey = <K = LocalizedLeafKeys<M, L>>(
     key: K,
     targetLocale?: Locale<M>,
   ): boolean => {
@@ -47,7 +47,7 @@ export class CoreTranslator<
   public t = <
     Result = string,
     L extends keyof M | "union" = "union",
-    K = LocalizedLeafKey<M, L>,
+    K = LocalizedLeafKeys<M, L>,
   >(
     key: K,
     replacements?: Replacement,

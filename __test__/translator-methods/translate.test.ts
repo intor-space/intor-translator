@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/no-useless-undefined */
-import type { TranslateOptions } from "@/translator-methods/translate";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { translate } from "@/translator-methods/translate/translate";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
@@ -33,7 +32,7 @@ describe("translate", () => {
       translateConfig: {},
       key: "hello",
       replacements: { name: "Yiming" },
-    } as TranslateOptions);
+    });
 
     expect(result).toBe("Hello Yiming");
   });
@@ -50,7 +49,7 @@ describe("translate", () => {
       translateConfig: { handlers: { formatHandler } },
       key: "hello",
       replacements: { name: "Yiming" },
-    } as TranslateOptions);
+    });
 
     expect(result).toBe("Formatted Hello");
     expect(formatHandler).toHaveBeenCalled();
@@ -69,7 +68,7 @@ describe("translate", () => {
         handlers: { loadingHandler },
       },
       key: "hello",
-    } as TranslateOptions);
+    });
 
     expect(result).toBe("Loading...");
     expect(loadingHandler).toHaveBeenCalled();
@@ -88,7 +87,7 @@ describe("translate", () => {
       isLoadingRef,
       translateConfig: { handlers: { missingHandler } },
       key: "notExist",
-    } as TranslateOptions);
+    });
     expect(result1).toBe("Missing!");
     expect(missingHandler).toHaveBeenCalled();
 
@@ -99,7 +98,7 @@ describe("translate", () => {
       isLoadingRef,
       translateConfig: { placeholder: "Placeholder" },
       key: "notExist",
-    } as TranslateOptions);
+    });
     expect(result2).toBe("Placeholder");
 
     // fallback to key
@@ -109,7 +108,7 @@ describe("translate", () => {
       isLoadingRef,
       translateConfig: {},
       key: "notExist",
-    } as TranslateOptions);
+    });
     expect(result3).toBe("notExist");
   });
 
@@ -122,7 +121,7 @@ describe("translate", () => {
         isLoadingRef,
         translateConfig: {},
         key: "hello",
-      } as TranslateOptions),
+      }),
     ).toThrow("[intor-translator] 'messages' is required");
   });
 
@@ -136,7 +135,7 @@ describe("translate", () => {
       isLoadingRef,
       translateConfig: {},
       key: "hello",
-    } as TranslateOptions);
+    });
 
     expect(result).toBe("Hello");
   });
@@ -153,7 +152,7 @@ describe("translate", () => {
         handlers: {},
       },
       key: "hello",
-    } as TranslateOptions);
+    });
 
     expect(result).toBe("Please wait");
     isLoadingRef.current = false;

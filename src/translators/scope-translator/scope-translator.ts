@@ -1,7 +1,6 @@
-import type { CoreTranslatorOptions } from "@/translators/core-translator";
-import type { ScopeTranslatorMethods } from "@/translators/scope-translator/types";
+import type { ScopeTranslatorMethods, ScopeTranslatorOptions } from "./types";
 import type { Locale, Replacement } from "@/types";
-import type { LocalizedNodeKey, ScopedLeafKeys } from "@/types/key";
+import type { LocalizedNodeKeys, ScopedLeafKeys } from "@/types/keys";
 import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
 import { translate } from "@/translator-methods/translate";
 import { CoreTranslator } from "@/translators/core-translator";
@@ -11,11 +10,11 @@ export class ScopeTranslator<
   M = unknown,
   L extends keyof M | "union" = "union",
 > extends CoreTranslator<M> {
-  constructor(options: CoreTranslatorOptions<M>) {
+  constructor(options: ScopeTranslatorOptions<M>) {
     super(options);
   }
 
-  public scoped<PK extends LocalizedNodeKey<M, L> | undefined = undefined>(
+  public scoped<PK extends LocalizedNodeKeys<M, L> | undefined = undefined>(
     preKey?: PK,
   ): PK extends string
     ? ScopeTranslatorMethods<M, L, ScopedLeafKeys<M, PK, L>>

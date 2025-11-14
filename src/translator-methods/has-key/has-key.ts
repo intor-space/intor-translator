@@ -1,4 +1,4 @@
-import type { HasKeyOptions } from "@/translator-methods/has-key";
+import type { HasKeyOptions } from "./types";
 import type { LocaleMessages } from "@/types";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
 import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";

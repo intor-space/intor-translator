@@ -1,34 +1,37 @@
+// Translator
 export {
   ScopeTranslator,
   ScopeTranslator as Translator, // Alias
+  type ScopeTranslatorOptions,
+  type ScopeTranslatorMethods,
 } from "@/translators";
 
+// Translate handlers
 export type {
-  Replacement,
-  // message structure
-  NestedMessage,
-  LocaleMessages,
-  LocaleMessagesUnion,
-  // locale
-  Locale,
-  FallbackLocalesMap,
-  // nested keys
-  NodeKeys,
-  LeafKeys,
-  LocalizedLeafKey,
-  ScopedLeafKeys,
-  // translator refs
-  MessagesRef,
-  LocaleRef,
-  IsLoadingRef,
-} from "@/types";
-
-// Translate Config
-export {
-  TranslateConfig,
   TranslateHandlers,
   FormatHandler,
   LoadingHandler,
   MissingHandler,
   TranslateHandlerContext,
 } from "@/translator-methods/translate";
+
+export type {
+  // Locale
+  Locale,
+  FallbackLocalesMap,
+  // Messages
+  NestedMessage,
+  LocaleMessages,
+  LocalizedMessagesUnion,
+  // Replacement
+  Replacement,
+  // Keys
+  NodeKeys,
+  LeafKeys,
+  LocalizedLeafKeys,
+  ScopedLeafKeys,
+  // Translator refs
+  MessagesRef,
+  LocaleRef,
+  IsLoadingRef,
+} from "@/types";

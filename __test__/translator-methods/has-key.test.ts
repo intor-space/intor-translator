@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/no-useless-undefined */
-import type { HasKeyOptions } from "@/translator-methods/has-key";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { hasKey } from "@/translator-methods/has-key/has-key";
 import { findMessageInLocales } from "@/utils/find-message-in-locales";
@@ -27,7 +26,7 @@ describe("hasKey", () => {
       messagesRef,
       localeRef,
       key: "hello",
-    } as HasKeyOptions);
+    });
     expect(result).toBe(true);
   });
 
@@ -39,7 +38,7 @@ describe("hasKey", () => {
       messagesRef,
       localeRef,
       key: "missing",
-    } as HasKeyOptions);
+    });
     expect(result).toBe(false);
   });
 
@@ -50,7 +49,7 @@ describe("hasKey", () => {
         messagesRef: badMessagesRef,
         localeRef,
         key: "hello",
-      } as HasKeyOptions),
+      }),
     ).toThrow("[intor-translator] 'messages' is required");
   });
 
@@ -63,7 +62,7 @@ describe("hasKey", () => {
       localeRef,
       key: "hello",
       targetLocale: "zh",
-    } as HasKeyOptions);
+    });
     expect(result).toBe(true);
   });
 });

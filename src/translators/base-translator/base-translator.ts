@@ -1,8 +1,10 @@
-import type { BaseTranslatorOptions } from "@/translators/base-translator";
+import type { BaseTranslatorOptions } from "./types";
 import type { Locale, LocaleMessages, LocaleRef, MessagesRef } from "@/types";
 
 export class BaseTranslator<M = unknown> {
+  /** Current messages for translation, updatable at runtime */
   protected messagesRef: MessagesRef<M> = { current: undefined };
+  /** Current active locale, can be changed dynamically */
   protected localeRef: LocaleRef<M>;
 
   constructor(options: BaseTranslatorOptions<M>) {
