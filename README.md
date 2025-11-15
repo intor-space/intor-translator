@@ -88,7 +88,7 @@ const translator = new Translator({
   fallbackLocales: { en: ["zh"] }, // Use zh if message not found in en
   placeholder: "Content unavailable", // Shown if key is missing in all locales
   handlers: {
-    formatMessage: ({ locale, message }) =>
+    formatHandler: ({ locale, message }) =>
       locale === "zh" ? `${message}。` : `${message}.`, // Auto punctuation per locale
   },
 });
@@ -110,7 +110,7 @@ import { Translator, FormatMessage } from "intor-translator";
 import { IntlMessageFormat } from "intl-messageformat";
 
 // Create a custom handler
-const formatMessage: FormatMessage = ({ message, locale, replacements }) => {
+const formatHandler: FormatMessage = ({ message, locale, replacements }) => {
   const formatter = new IntlMessageFormat(message, locale);
   return formatter.format(replacements);
 };
@@ -126,7 +126,7 @@ const messages = {
 const translator = new Translator({
   locale: "en",
   messages,
-  handlers: { formatMessage },
+  handlers: { formatHandler },
 });
 
 translator.t("notification", { name: "John", count: 0 }); // -> John has no messages.
@@ -141,7 +141,7 @@ translator.t("notification", { name: "John", count: 5 }); // -> John has 5 messa
 
 | Option            | Type                                  | Description                                                              |
 | ----------------- | ------------------------------------- | ------------------------------------------------------------------------ |
-| `messages`        | `Readonly<LocaleNamespaceMessages>`   | Translation messages grouped by locale and namespace                     |
+| `messages`        | `Readonly<LocaleMessages>`            | Translation messages grouped by locale and namespace                     |
 | `locale`          | `string`                              | Active locale key                                                        |
 | `fallbackLocales` | `Record<Locale, Locale[]>` (optional) | Locales to fallback to when a key is missing                             |
 | `placeholder`     | `string` (optional)                   | Message to display when a key is missing in all locales                  |
@@ -152,9 +152,11 @@ translator.t("notification", { name: "John", count: 5 }); // -> John has 5 messa
 
 ```ts
 type TranslateHandlers = {
-  formatMessage?: (ctx: TranslateContext & { message: string }) => unknown;
-  onLoading?: (ctx: TranslateContext) => unknown;
-  onMissing?: (ctx: TranslateContext) => unknown;
+  formatHandler?: (
+    ctx: TranslateHandlerContext & { message: string },
+  ) => unknown;
+  LoadingHandler?: (ctx: TranslateHandlerContext) => unknown;
+  MissingHandler?: (ctx: TranslateHandlerContext) => unknown;
 };
 ```
 
@@ -165,11 +167,11 @@ type TranslateHandlers = {
 
 ### Instance Properties
 
-| Property    | Type           | Description                                |
-| ----------- | -------------- | ------------------------------------------ |
-| `messages`  | `M`            | Current messages object                    |
-| `locale`    | `LocaleKey<M>` | Currently active locale                    |
-| `isLoading` | `boolean`      | Whether the translator is in loading state |
+| Property    | Type        | Description                                |
+| ----------- | ----------- | ------------------------------------------ |
+| `messages`  | `M`         | Current messages object                    |
+| `locale`    | `Locale<M>` | Currently active locale                    |
+| `isLoading` | `boolean`   | Whether the translator is in loading state |
 
 ---
 
@@ -178,7 +180,7 @@ type TranslateHandlers = {
 | Method        | Signature                                         | Description                                                         |
 | ------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
 | `setMessages` | `(messages: M) => void`                           | Replaces the current message set                                    |
-| `setLocale`   | `(locale: LocaleKey<M>) => boolean`               | Sets a new locale and returns whether it changed                    |
+| `setLocale`   | `(locale: Locale<M>) => boolean`                  | Sets a new locale and returns whether it changed                    |
 | `setLoading`  | `(state: boolean) => void`                        | Sets the loading state manually                                     |
 | `hasKey`      | `(key, targetLocale?) => boolean`                 | Checks whether the given key exists in the target or current locale |
 | `t`           | `<Result = string>(key, replacements?) => Result` | Translates a key with optional replacements                         |
