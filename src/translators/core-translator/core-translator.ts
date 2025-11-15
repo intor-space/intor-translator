@@ -44,11 +44,7 @@ export class CoreTranslator<
     });
   };
 
-  public t = <
-    Result = string,
-    L extends keyof M | "union" = "union",
-    K = LocalizedLeafKeys<M, L>,
-  >(
+  public t = <Result = string, K = LocalizedLeafKeys<M, L>>(
     key: K,
     replacements?: Replacement,
   ): Result => {
