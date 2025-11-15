@@ -26,6 +26,7 @@ export type {
   // Replacement
   Replacement,
   // Keys
+  DefaultDepth,
   NodeKeys,
   LeafKeys,
   LocalizedNodeKeys,

@@ -7,7 +7,7 @@ import { unicornConfig } from "./.config/eslint/unicorn.mjs";
 import { unusedImportsConfig } from "./.config/eslint/unused-imports.mjs";
 
 const eslintConfig = defineConfig([
-  globalIgnores([".yarn/**", ".config/**", "eslint.config.mjs"]),
+  globalIgnores([".yarn/**", ".config/**", "eslint.config.mjs", "dist"]),
 
   // JS
   js.configs.recommended,
