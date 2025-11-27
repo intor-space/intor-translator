@@ -1,6 +1,6 @@
 {
   "name": "intor-translator",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A type safe translator that knows what to say and how to handle the rest. Supports custom messages, rich replacements, and async loading.",
   "author": "Yiming Liao",
   "license": "MIT",
