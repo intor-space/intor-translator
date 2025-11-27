@@ -112,19 +112,6 @@ describe("translate", () => {
     expect(result3).toBe("notExist");
   });
 
-  it("should throw if messagesRef.current is undefined", () => {
-    const badMessagesRef = { current: undefined };
-    expect(() =>
-      translate({
-        messagesRef: badMessagesRef,
-        localeRef,
-        isLoadingRef,
-        translateConfig: {},
-        key: "hello",
-      }),
-    ).toThrow("[intor-translator] 'messages' is required");
-  });
-
   it("returns message directly if no replacements and no formatHandler", () => {
     vi.mocked(resolveCandidateLocales).mockReturnValue(["en"]);
     vi.mocked(findMessageInLocales).mockReturnValue("Hello");

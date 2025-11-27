@@ -1,15 +1,24 @@
 import type { BaseTranslatorOptions } from "./types";
-import type { Locale, LocaleMessages, LocaleRef, MessagesRef } from "@/types";
+import type {
+  IsLoadingRef,
+  Locale,
+  LocaleMessages,
+  LocaleRef,
+  MessagesRef,
+} from "@/types";
 
 export class BaseTranslator<M = unknown> {
-  /** Current messages for translation, updatable at runtime */
-  protected messagesRef: MessagesRef<M> = { current: undefined };
-  /** Current active locale, can be changed dynamically */
+  /** Current messages for translation */
+  protected messagesRef: MessagesRef<M>;
+  /** Current active locale */
   protected localeRef: LocaleRef<M>;
+  /** Current loading state */
+  protected isLoadingRef: IsLoadingRef;
 
   constructor(options: BaseTranslatorOptions<M>) {
-    this.messagesRef = { current: options.messages };
+    this.messagesRef = { current: options.messages ?? ({} as M) };
     this.localeRef = { current: options.locale };
+    this.isLoadingRef = { current: options.isLoading ?? false };
   }
 
   /** Get messages. */
@@ -20,6 +29,11 @@ export class BaseTranslator<M = unknown> {
   /** Get the current active locale. */
   public get locale(): Locale<M> {
     return this.localeRef.current;
+  }
+
+  /** Get the current loading state. */
+  public get isLoading(): boolean {
+    return this.isLoadingRef.current;
   }
 
   /**
@@ -39,5 +53,10 @@ export class BaseTranslator<M = unknown> {
    */
   public setLocale(newLocale: Locale<M>): void {
     this.localeRef.current = newLocale;
+  }
+
+  /** Set the loading state. */
+  public setLoading(state: boolean) {
+    this.isLoadingRef.current = state;
   }
 }

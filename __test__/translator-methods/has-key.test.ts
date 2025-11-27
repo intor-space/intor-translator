@@ -42,17 +42,6 @@ describe("hasKey", () => {
     expect(result).toBe(false);
   });
 
-  it("should throw if messagesRef.current is undefined", () => {
-    const badMessagesRef = { current: undefined };
-    expect(() =>
-      hasKey({
-        messagesRef: badMessagesRef,
-        localeRef,
-        key: "hello",
-      }),
-    ).toThrow("[intor-translator] 'messages' is required");
-  });
-
   it("should use targetLocale if provided", () => {
     vi.mocked(resolveCandidateLocales).mockReturnValue(["zh"]);
     vi.mocked(findMessageInLocales).mockReturnValue("世界");

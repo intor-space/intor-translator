@@ -27,14 +27,6 @@ describe("CoreTranslator", () => {
     expect(translator.isLoading).toBe(false);
   });
 
-  it("should set and get loading state", () => {
-    const translator = new CoreTranslator(options);
-    translator.setLoading(true);
-    expect(translator.isLoading).toBe(true);
-    translator.setLoading(false);
-    expect(translator.isLoading).toBe(false);
-  });
-
   it("hasKey should call hasKeyMethod with correct arguments", () => {
     const translator = new CoreTranslator(options);
     const key = "hello";

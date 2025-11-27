@@ -14,7 +14,7 @@ import type { Locale } from "@/types";
  * ```
  */
 export type MessagesRef<M = unknown> = {
-  current?: Readonly<M>;
+  current: Readonly<M>;
 };
 
 /**

@@ -14,6 +14,7 @@ export class ScopeTranslator<
     super(options);
   }
 
+  /** Create a scoped translator with a prefix key, providing `t` and `hasKey` for nested keys. */
   public scoped<PK extends LocalizedNodeKeys<M, L> | undefined = undefined>(
     preKey?: PK,
   ): PK extends string

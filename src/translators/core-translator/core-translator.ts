@@ -1,10 +1,5 @@
 import type { CoreTranslatorOptions } from "./types";
-import type {
-  Replacement,
-  IsLoadingRef,
-  LocalizedLeafKeys,
-  Locale,
-} from "@/types";
+import type { Replacement, LocalizedLeafKeys, Locale } from "@/types";
 import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
 import { translate } from "@/translator-methods/translate";
 import { BaseTranslator } from "@/translators/base-translator";
@@ -14,21 +9,10 @@ export class CoreTranslator<
   L extends keyof M | "union" = "union",
 > extends BaseTranslator<M> {
   protected options: CoreTranslatorOptions<M>;
-  protected isLoadingRef: IsLoadingRef = { current: false };
 
   constructor(options: CoreTranslatorOptions<M>) {
     super({ locale: options.locale, messages: options.messages });
     this.options = options;
-  }
-
-  /** Get the current loading state. */
-  public get isLoading(): boolean {
-    return this.isLoadingRef.current;
-  }
-
-  /** Set the loading state. */
-  public setLoading(state: boolean) {
-    this.isLoadingRef.current = state;
   }
 
   /** Check if a key exists in the specified locale or current locale. */
@@ -44,6 +28,7 @@ export class CoreTranslator<
     });
   };
 
+  /** Get the translated message for a key, with optional replacements. */
   public t = <Result = string, K = LocalizedLeafKeys<M, L>>(
     key: K,
     replacements?: Replacement,

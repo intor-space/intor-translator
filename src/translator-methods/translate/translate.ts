@@ -20,10 +20,6 @@ export const translate = <Result = string>({
   const locale = localeRef.current;
   const isLoading = isLoadingRef.current;
 
-  if (!messages) {
-    throw new Error("[intor-translator] 'messages' is required");
-  }
-
   const { fallbackLocales, loadingMessage, placeholder, handlers } =
     translateConfig;
   const { formatHandler, loadingHandler, missingHandler } = handlers || {};

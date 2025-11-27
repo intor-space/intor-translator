@@ -22,7 +22,7 @@ export type NestedMessage = string | { [key: string]: NestedMessage };
  * Messages grouped by locale.
  * Used to structure all available messages for multiple locales.
  *
- * - Each key is a locale string, e.g., "en" or "zh-TW".
+ * - The root-level keys are locale identifiers, e.g., "en" or "zh-TW".
  * - Each value is a `NestedMessage`, allowing for deeply nested message objects.
  *
  * @example

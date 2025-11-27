@@ -11,20 +11,20 @@ describe("BaseTranslator", () => {
     const translator = new BaseTranslator({
       messages,
       locale: "en",
+      isLoading: true,
     });
 
     expect(translator.messages).toEqual(messages);
     expect(translator.locale).toBe("en");
+    expect(translator.isLoading).toBe(true);
   });
 
-  it("should return undefined if no messages provided", () => {
-    const translator = new BaseTranslator({
-      messages: undefined,
-      locale: "en",
-    });
+  it("should default messages to empty object and isLoading to false if not provided", () => {
+    const translator = new BaseTranslator({ locale: "en" });
 
-    expect(translator.messages).toBeUndefined();
+    expect(translator.messages).toEqual({});
     expect(translator.locale).toBe("en");
+    expect(translator.isLoading).toBe(false);
   });
 
   it("should update messages using setMessages", () => {
@@ -52,18 +52,53 @@ describe("BaseTranslator", () => {
     expect(translator.locale).toBe("zh");
   });
 
-  it("should allow setting messages of any compatible shape", () => {
+  it("should update loading state using setLoading", () => {
     const translator = new BaseTranslator({
-      messages: messages,
+      messages,
+      locale: "en",
+      isLoading: false,
+    });
+
+    expect(translator.isLoading).toBe(false);
+
+    translator.setLoading(true);
+    expect(translator.isLoading).toBe(true);
+
+    translator.setLoading(false);
+    expect(translator.isLoading).toBe(false);
+  });
+
+  it("should allow overwriting messages of any compatible shape", () => {
+    const translator = new BaseTranslator({
+      messages,
       locale: "en",
     });
 
-    // 使用 setMessages 強制覆蓋型別
     const overrideMessages = {
       en: { hello: "Override" },
       zh: { hello: "覆蓋" },
     };
+
     translator.setMessages(overrideMessages);
     expect(translator.messages).toEqual(overrideMessages);
+  });
+
+  it("should maintain references for locale and loading state correctly", () => {
+    const translator = new BaseTranslator({
+      messages,
+      locale: "en",
+      isLoading: true,
+    });
+
+    const originalLocaleRef = translator["localeRef"];
+    const originalLoadingRef = translator["isLoadingRef"];
+
+    translator.setLocale("zh");
+    translator.setLoading(false);
+
+    expect(translator["localeRef"]).toBe(originalLocaleRef);
+    expect(translator["isLoadingRef"]).toBe(originalLoadingRef);
+    expect(translator.locale).toBe("zh");
+    expect(translator.isLoading).toBe(false);
   });
 });

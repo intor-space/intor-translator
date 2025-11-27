@@ -17,4 +17,9 @@ export interface BaseTranslatorOptions<M = unknown> {
    * - If `messages` is typed as `LocaleMessages`, this can be inferred automatically.
    */
   locale: Locale<M>;
+
+  /**
+   * Indicates whether the translator is in a loading state.
+   */
+  isLoading?: boolean;
 }
