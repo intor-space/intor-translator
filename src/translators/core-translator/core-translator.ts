@@ -11,7 +11,11 @@ export class CoreTranslator<
   protected options: CoreTranslatorOptions<M>;
 
   constructor(options: CoreTranslatorOptions<M>) {
-    super({ locale: options.locale, messages: options.messages });
+    super({
+      locale: options.locale,
+      messages: options.messages,
+      isLoading: options.isLoading,
+    });
     this.options = options;
   }
 
