@@ -24,8 +24,8 @@ export class ScopeTranslator<
       hasKey: (key?: string, targetLocale?: Locale<M>): boolean => {
         const fullKey = getFullKey(preKey as string | undefined, key);
         return hasKeyMethod({
-          messagesRef: this.messagesRef,
-          localeRef: this.localeRef,
+          messages: this._messages,
+          locale: this._locale,
           key: fullKey as string,
           targetLocale,
         });
@@ -33,9 +33,9 @@ export class ScopeTranslator<
       t: (key?: string, replacements?: Replacement): string => {
         const fullKey = getFullKey(preKey as string | undefined, key);
         return translate({
-          messagesRef: this.messagesRef,
-          localeRef: this.localeRef,
-          isLoadingRef: this.isLoadingRef,
+          messages: this._messages,
+          locale: this._locale,
+          isLoading: this._isLoading,
           translateConfig: this.options,
           key: fullKey as string,
           replacements,

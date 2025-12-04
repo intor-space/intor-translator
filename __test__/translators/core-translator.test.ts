@@ -36,8 +36,8 @@ describe("CoreTranslator", () => {
     const result = translator.hasKey(key, targetLocale);
     expect(result).toBe(true);
     expect(spy).toHaveBeenCalledWith({
-      messagesRef: translator["messagesRef"],
-      localeRef: translator["localeRef"],
+      messages: translator["messages"],
+      locale: translator["locale"],
       key,
       targetLocale,
     });
@@ -54,9 +54,9 @@ describe("CoreTranslator", () => {
     const result = translator.t(key, replacements);
     expect(result).toBe("Hello Yiming");
     expect(spy).toHaveBeenCalledWith({
-      messagesRef: translator["messagesRef"],
-      localeRef: translator["localeRef"],
-      isLoadingRef: translator["isLoadingRef"],
+      messages: translator["messages"],
+      locale: translator["locale"],
+      isLoading: translator["isLoading"],
       translateConfig: options,
       key,
       replacements,

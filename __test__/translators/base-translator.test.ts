@@ -83,21 +83,16 @@ describe("BaseTranslator", () => {
     expect(translator.messages).toEqual(overrideMessages);
   });
 
-  it("should maintain references for locale and loading state correctly", () => {
+  it("should update locale and loading state correctly", () => {
     const translator = new BaseTranslator({
       messages,
       locale: "en",
       isLoading: true,
     });
 
-    const originalLocaleRef = translator["localeRef"];
-    const originalLoadingRef = translator["isLoadingRef"];
-
     translator.setLocale("zh");
     translator.setLoading(false);
 
-    expect(translator["localeRef"]).toBe(originalLocaleRef);
-    expect(translator["isLoadingRef"]).toBe(originalLoadingRef);
     expect(translator.locale).toBe("zh");
     expect(translator.isLoading).toBe(false);
   });

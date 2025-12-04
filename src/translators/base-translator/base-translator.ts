@@ -1,39 +1,33 @@
 import type { BaseTranslatorOptions } from "./types";
-import type {
-  IsLoadingRef,
-  Locale,
-  LocaleMessages,
-  LocaleRef,
-  MessagesRef,
-} from "@/types";
+import type { Locale, LocaleMessages } from "@/types";
 
 export class BaseTranslator<M = unknown> {
   /** Current messages for translation */
-  protected messagesRef: MessagesRef<M>;
+  protected _messages: Readonly<M>;
   /** Current active locale */
-  protected localeRef: LocaleRef<M>;
+  protected _locale: Locale<M>;
   /** Current loading state */
-  protected isLoadingRef: IsLoadingRef;
+  protected _isLoading: boolean;
 
   constructor(options: BaseTranslatorOptions<M>) {
-    this.messagesRef = { current: options.messages ?? ({} as M) };
-    this.localeRef = { current: options.locale };
-    this.isLoadingRef = { current: options.isLoading ?? false };
+    this._messages = options.messages ?? ({} as M);
+    this._locale = options.locale;
+    this._isLoading = options.isLoading ?? false;
   }
 
   /** Get messages. */
-  public get messages(): M | undefined {
-    return this.messagesRef.current;
+  public get messages(): M {
+    return this._messages;
   }
 
   /** Get the current active locale. */
   public get locale(): Locale<M> {
-    return this.localeRef.current;
+    return this._locale;
   }
 
   /** Get the current loading state. */
   public get isLoading(): boolean {
-    return this.isLoadingRef.current;
+    return this._isLoading;
   }
 
   /**
@@ -43,7 +37,7 @@ export class BaseTranslator<M = unknown> {
    * The type cast bypasses TypeScript restrictions on dynamic messages.
    */
   public setMessages<N extends LocaleMessages>(messages: N) {
-    this.messagesRef.current = messages as unknown as M;
+    this._messages = messages as unknown as M;
   }
 
   /**
@@ -52,11 +46,11 @@ export class BaseTranslator<M = unknown> {
    * - Note: Unlike `setMessages`, the locale structure cannot be changed at runtime.
    */
   public setLocale(newLocale: Locale<M>): void {
-    this.localeRef.current = newLocale;
+    this._locale = newLocale;
   }
 
   /** Set the loading state. */
   public setLoading(state: boolean) {
-    this.isLoadingRef.current = state;
+    this._isLoading = state;
   }
 }

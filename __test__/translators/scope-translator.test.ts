@@ -36,8 +36,8 @@ describe("ScopeTranslator", () => {
     expect(result).toBe(true);
     expect(getFullKeyModule.getFullKey).toHaveBeenCalledWith("nested", "greet");
     expect(hasKeyModule.hasKey).toHaveBeenCalledWith({
-      messagesRef: translator["messagesRef"],
-      localeRef: translator["localeRef"],
+      messages: translator["messages"],
+      locale: translator["locale"],
       key: "nested.greet",
       targetLocale: "en",
     });
@@ -52,9 +52,9 @@ describe("ScopeTranslator", () => {
     expect(result).toBe("Hi!");
     expect(getFullKeyModule.getFullKey).toHaveBeenCalledWith("nested", "greet");
     expect(translateModule.translate).toHaveBeenCalledWith({
-      messagesRef: translator["messagesRef"],
-      localeRef: translator["localeRef"],
-      isLoadingRef: translator["isLoadingRef"],
+      messages: translator["messages"],
+      locale: translator["locale"],
+      isLoading: translator["isLoading"],
       translateConfig: options,
       key: "nested.greet",
       replacements: { name: "Yiming" },

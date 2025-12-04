@@ -25,8 +25,8 @@ export class CoreTranslator<
     targetLocale?: Locale<M>,
   ): boolean => {
     return hasKeyMethod({
-      messagesRef: this.messagesRef,
-      localeRef: this.localeRef,
+      messages: this._messages,
+      locale: this._locale,
       key: key as string,
       targetLocale,
     });
@@ -38,9 +38,9 @@ export class CoreTranslator<
     replacements?: Replacement,
   ): Result => {
     return translate({
-      messagesRef: this.messagesRef,
-      localeRef: this.localeRef,
-      isLoadingRef: this.isLoadingRef,
+      messages: this._messages,
+      locale: this._locale,
+      isLoading: this._isLoading,
       translateConfig: this.options,
       key: key as string,
       replacements,

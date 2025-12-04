@@ -16,5 +16,3 @@ export type {
   LocalizedLeafKeys,
   ScopedLeafKeys,
 } from "./keys";
-
-export type { MessagesRef, LocaleRef, IsLoadingRef } from "./translator-refs";

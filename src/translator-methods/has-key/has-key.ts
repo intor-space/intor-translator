@@ -7,15 +7,16 @@ import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
  * Check if a key exists in the specified locale or current locale.
  */
 export const hasKey = ({
-  messagesRef,
-  localeRef,
+  messages,
+  locale,
   key,
   targetLocale,
 }: HasKeyOptions): boolean => {
-  const messages = messagesRef.current as LocaleMessages;
-  const locale = localeRef.current;
-
   const candidateLocales = resolveCandidateLocales(targetLocale || locale);
-  const message = findMessageInLocales({ messages, candidateLocales, key });
+  const message = findMessageInLocales({
+    messages: messages as LocaleMessages,
+    candidateLocales,
+    key,
+  });
   return !!message;
 };

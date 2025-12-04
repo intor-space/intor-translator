@@ -56,7 +56,8 @@
     "type": "tsc --noEmit",
     "lint": "eslint",
     "lint:debug": "eslint --debug",
-    "knip": "knip --config .config/knip.config.ts"
+    "knip": "knip --config .config/knip.config.ts",
+    "examples:html": "vite --config examples/html/vite.config.ts"
   },
   "dependencies": {},
   "devDependencies": {
@@ -77,6 +78,7 @@
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.46.4",
+    "vite": "^7.2.6",
     "vitest": "^4.0.9"
   },
   "sideEffects": false,

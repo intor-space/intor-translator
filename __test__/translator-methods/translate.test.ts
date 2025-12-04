@@ -10,11 +10,12 @@ vi.mock("@/utils/replace-values");
 vi.mock("@/utils/resolve-candidate-locales");
 
 describe("translate", () => {
-  const messagesRef = {
-    current: { en: { hello: "Hello {name}" }, zh: { hello: "你好 {name}" } },
+  const messages = {
+    en: { hello: "Hello {name}" },
+    zh: { hello: "你好 {name}" },
   };
-  const localeRef = { current: "en" };
-  const isLoadingRef = { current: false };
+  const locale = "en";
+  let isLoading = false;
 
   beforeEach(() => {
     vi.resetAllMocks();
@@ -26,9 +27,9 @@ describe("translate", () => {
     vi.mocked(replaceValues).mockReturnValue("Hello Yiming");
 
     const result = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: {},
       key: "hello",
       replacements: { name: "Yiming" },
@@ -43,9 +44,9 @@ describe("translate", () => {
 
     const formatHandler = vi.fn().mockReturnValue("Formatted Hello");
     const result = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: { handlers: { formatHandler } },
       key: "hello",
       replacements: { name: "Yiming" },
@@ -56,13 +57,13 @@ describe("translate", () => {
   });
 
   it("should return loadingMessage or loadingHandler if isLoading", () => {
-    isLoadingRef.current = true;
+    isLoading = true;
     const loadingHandler = vi.fn().mockReturnValue("Loading...");
 
     const result = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: {
         loadingMessage: "Please wait",
         handlers: { loadingHandler },
@@ -72,7 +73,7 @@ describe("translate", () => {
 
     expect(result).toBe("Loading...");
     expect(loadingHandler).toHaveBeenCalled();
-    isLoadingRef.current = false;
+    isLoading = false;
   });
 
   it("should return placeholder or key if message missing", () => {
@@ -82,9 +83,9 @@ describe("translate", () => {
     // missingHandler
     const missingHandler = vi.fn().mockReturnValue("Missing!");
     const result1 = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: { handlers: { missingHandler } },
       key: "notExist",
     });
@@ -93,9 +94,9 @@ describe("translate", () => {
 
     // placeholder
     const result2 = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: { placeholder: "Placeholder" },
       key: "notExist",
     });
@@ -103,9 +104,9 @@ describe("translate", () => {
 
     // fallback to key
     const result3 = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: {},
       key: "notExist",
     });
@@ -117,9 +118,9 @@ describe("translate", () => {
     vi.mocked(findMessageInLocales).mockReturnValue("Hello");
 
     const result = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: {},
       key: "hello",
     });
@@ -128,12 +129,12 @@ describe("translate", () => {
   });
 
   it("returns loadingMessage if isLoading is true and no loadingHandler", () => {
-    isLoadingRef.current = true;
+    isLoading = true;
 
     const result = translate({
-      messagesRef,
-      localeRef,
-      isLoadingRef,
+      messages,
+      locale,
+      isLoading,
       translateConfig: {
         loadingMessage: "Please wait",
         handlers: {},
@@ -142,6 +143,6 @@ describe("translate", () => {
     });
 
     expect(result).toBe("Please wait");
-    isLoadingRef.current = false;
+    isLoading = false;
   });
 });

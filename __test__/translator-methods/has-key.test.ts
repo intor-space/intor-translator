@@ -9,10 +9,11 @@ vi.mock("@/utils/find-message-in-locales");
 vi.mock("@/utils/resolve-candidate-locales");
 
 describe("hasKey", () => {
-  const messagesRef = {
-    current: { en: { hello: "world" }, zh: { hello: "世界" } },
+  const messages = {
+    en: { hello: "world" },
+    zh: { hello: "世界" },
   };
-  const localeRef = { current: "en" };
+  const locale = "en";
 
   beforeEach(() => {
     vi.resetAllMocks();
@@ -23,8 +24,8 @@ describe("hasKey", () => {
     vi.mocked(findMessageInLocales).mockReturnValue("world");
 
     const result = hasKey({
-      messagesRef,
-      localeRef,
+      messages,
+      locale,
       key: "hello",
     });
     expect(result).toBe(true);
@@ -35,8 +36,8 @@ describe("hasKey", () => {
     vi.mocked(findMessageInLocales).mockReturnValue(undefined);
 
     const result = hasKey({
-      messagesRef,
-      localeRef,
+      messages,
+      locale,
       key: "missing",
     });
     expect(result).toBe(false);
@@ -47,8 +48,8 @@ describe("hasKey", () => {
     vi.mocked(findMessageInLocales).mockReturnValue("世界");
 
     const result = hasKey({
-      messagesRef,
-      localeRef,
+      messages,
+      locale,
       key: "hello",
       targetLocale: "zh",
     });

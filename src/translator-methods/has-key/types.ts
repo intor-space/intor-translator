@@ -1,9 +1,8 @@
 import type { LocalizedLeafKeys, Locale } from "@/types";
-import type { LocaleRef, MessagesRef } from "@/types/translator-refs";
 
 export type HasKeyOptions = {
-  messagesRef: MessagesRef;
-  localeRef: LocaleRef;
+  messages: Readonly<unknown>;
+  locale: Locale<unknown>;
   key: LocalizedLeafKeys;
   targetLocale?: Locale;
 };

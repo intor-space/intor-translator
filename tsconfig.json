@@ -9,6 +9,7 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noEmit": true,
+    "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"]
     },

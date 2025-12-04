@@ -32,8 +32,4 @@ export type {
   LocalizedNodeKeys,
   LocalizedLeafKeys,
   ScopedLeafKeys,
-  // Translator refs
-  MessagesRef,
-  LocaleRef,
-  IsLoadingRef,
 } from "@/types";

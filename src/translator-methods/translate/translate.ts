@@ -9,17 +9,13 @@ import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
  * formatting handlers, and value replacements.
  */
 export const translate = <Result = string>({
-  messagesRef,
-  localeRef,
-  isLoadingRef,
+  messages,
+  locale,
+  isLoading,
   translateConfig,
   key,
   replacements,
 }: TranslateOptions): Result => {
-  const messages = messagesRef.current;
-  const locale = localeRef.current;
-  const isLoading = isLoadingRef.current;
-
   const { fallbackLocales, loadingMessage, placeholder, handlers } =
     translateConfig;
   const { formatHandler, loadingHandler, missingHandler } = handlers || {};

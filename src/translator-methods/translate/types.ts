@@ -1,15 +1,10 @@
 import type { TranslateConfig } from "@/translator-methods/translate";
-import type { Replacement, LocalizedLeafKeys } from "@/types";
-import type {
-  IsLoadingRef,
-  LocaleRef,
-  MessagesRef,
-} from "@/types/translator-refs";
+import type { Replacement, LocalizedLeafKeys, Locale } from "@/types";
 
 export type TranslateOptions = {
-  messagesRef: MessagesRef;
-  localeRef: LocaleRef;
-  isLoadingRef: IsLoadingRef;
+  messages: Readonly<unknown>;
+  locale: Locale<unknown>;
+  isLoading: boolean;
   translateConfig: TranslateConfig;
   key: LocalizedLeafKeys;
   replacements?: Replacement;
