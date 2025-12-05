@@ -1,6 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// test-d/translator-types.test-d.ts
 import type { NodeKeys, LeafKeys } from "@/types";
 import { expectType } from "tsd";
 

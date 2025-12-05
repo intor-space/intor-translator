@@ -1,30 +1,63 @@
-import type { CoreTranslatorOptions } from "./types";
-import type { Replacement, LocalizedLeafKeys, Locale } from "@/types";
-import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
-import { translate } from "@/translator-methods/translate";
+import type { CoreTranslatorOptions, TranslatorPlugin } from "./types";
+import type { TranslateHook } from "@/pipeline/types";
+import type { TranslateConfig } from "@/translators/core-translator/translate-config.types";
+import type { Replacement, Locale, LocaleMessages } from "@/types";
+import type { LocalizedLeafKeys } from "@/types/keys/localized-key";
+import { DEFAULT_HOOKS } from "@/pipeline/hooks";
 import { BaseTranslator } from "@/translators/base-translator";
+import { hasKey } from "@/translators/shared/has-key";
+import { translate } from "@/translators/shared/translate";
 
+/**
+ * CoreTranslator provides the default translation behavior
+ * using the pipeline engine and built-in hooks.
+ *
+ * @template M - Shape of the messages object.
+ * @template L - Locale selection strategy ("union" or specific locale keys).
+ */
 export class CoreTranslator<
-  M = unknown,
+  M extends LocaleMessages,
   L extends keyof M | "union" = "union",
 > extends BaseTranslator<M> {
-  protected options: CoreTranslatorOptions<M>;
+  /** User-provided options including messages, locale, and config. */
+  protected translateConfig: TranslateConfig<M>;
+  /** Active pipeline hooks applied during translation. */
+  protected hooks: TranslateHook[] = [...DEFAULT_HOOKS];
 
   constructor(options: CoreTranslatorOptions<M>) {
-    super({
-      locale: options.locale,
-      messages: options.messages,
-      isLoading: options.isLoading,
-    });
-    this.options = options;
+    const { locale, messages, isLoading, plugins, ...translateConfig } =
+      options;
+    super({ locale, messages, isLoading });
+    this.translateConfig = translateConfig;
+    if (plugins) {
+      for (const plugin of plugins) this.use(plugin);
+    }
+    this.sortHooks();
+  }
+
+  /** Sort hooks by order value (lower runs earlier). */
+  private sortHooks() {
+    this.hooks.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+
+  /** Register a plugin or a raw pipeline hook. */
+  public use(plugin: TranslatorPlugin | TranslateHook) {
+    // Direct hook
+    if ("run" in plugin) this.hooks.push(plugin);
+    // Plugin with hooks
+    else if ("hook" in plugin && plugin.hook) {
+      const hooks = Array.isArray(plugin.hook) ? plugin.hook : [plugin.hook];
+      this.hooks.push(...hooks);
+    }
+    this.sortHooks();
   }
 
   /** Check if a key exists in the specified locale or current locale. */
-  public hasKey = <K = LocalizedLeafKeys<M, L>>(
+  public hasKey = <K extends LocalizedLeafKeys<M, L>>(
     key: K,
     targetLocale?: Locale<M>,
   ): boolean => {
-    return hasKeyMethod({
+    return hasKey({
       messages: this._messages,
       locale: this._locale,
       key: key as string,
@@ -33,15 +66,19 @@ export class CoreTranslator<
   };
 
   /** Get the translated message for a key, with optional replacements. */
-  public t = <Result = string, K = LocalizedLeafKeys<M, L>>(
+  public t = <
+    Result = string,
+    K extends LocalizedLeafKeys<M, L> = LocalizedLeafKeys<M, L>,
+  >(
     key: K,
     replacements?: Replacement,
   ): Result => {
     return translate({
+      hooks: this.hooks,
       messages: this._messages,
       locale: this._locale,
       isLoading: this._isLoading,
-      translateConfig: this.options,
+      translateConfig: this.translateConfig,
       key: key as string,
       replacements,
     });

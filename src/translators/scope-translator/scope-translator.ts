@@ -1,13 +1,13 @@
 import type { ScopeTranslatorMethods, ScopeTranslatorOptions } from "./types";
-import type { Locale, Replacement } from "@/types";
+import type { Locale, LocaleMessages, Replacement } from "@/types";
 import type { LocalizedNodeKeys, ScopedLeafKeys } from "@/types/keys";
-import { hasKey as hasKeyMethod } from "@/translator-methods/has-key";
-import { translate } from "@/translator-methods/translate";
 import { CoreTranslator } from "@/translators/core-translator";
-import { getFullKey } from "@/utils/get-full-key";
+import { getFullKey } from "@/translators/scope-translator/utils/get-full-key";
+import { hasKey as hasKeyMethod } from "@/translators/shared/has-key";
+import { translate } from "@/translators/shared/translate";
 
 export class ScopeTranslator<
-  M = unknown,
+  M extends LocaleMessages,
   L extends keyof M | "union" = "union",
 > extends CoreTranslator<M> {
   constructor(options: ScopeTranslatorOptions<M>) {
@@ -33,10 +33,11 @@ export class ScopeTranslator<
       t: (key?: string, replacements?: Replacement): string => {
         const fullKey = getFullKey(preKey as string | undefined, key);
         return translate({
+          hooks: this.hooks,
           messages: this._messages,
           locale: this._locale,
           isLoading: this._isLoading,
-          translateConfig: this.options,
+          translateConfig: this.translateConfig,
           key: fullKey as string,
           replacements,
         });

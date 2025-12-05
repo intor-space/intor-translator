@@ -1,8 +1,10 @@
+import type { TranslateContext } from "@/pipeline/types";
 import type { FallbackLocalesMap, Locale } from "@/types";
-import type { Replacement } from "@/types";
 
 /**
  * Configuration options for translation behavior.
+ *
+ * @template M - Messages map type.
  */
 export type TranslateConfig<M = unknown> = {
   /** Optional mapping of fallback locales to use when a message is missing in the current locale. */
@@ -15,46 +17,31 @@ export type TranslateConfig<M = unknown> = {
   handlers?: TranslateHandlers;
 };
 
-/**
- * Optional handler functions for customizing translation behavior.
- */
+/** Optional handler functions for customizing translation behavior. */
 export type TranslateHandlers = {
-  /** Function to format a resolved message before returning it. */
-  formatHandler?: FormatHandler;
   /** Function called when a translation is still loading. */
   loadingHandler?: LoadingHandler;
   /** Function called when no message is found for a given key. */
   missingHandler?: MissingHandler;
+  /** Function to format a resolved message before returning it. */
+  formatHandler?: FormatHandler;
 };
 
+/** Function called when translation is still loading. */
+export type LoadingHandler<Result = unknown> = (ctx: HandlerContext) => Result;
+/** Function called when no message is found for the given key. */
+export type MissingHandler<Result = unknown> = (ctx: HandlerContext) => Result;
 /** Function to format a resolved message. */
 export type FormatHandler<Result = unknown> = (
-  ctx: TranslateHandlerContext & { message: string },
-) => Result;
-/** Function called when translation is still loading. */
-export type LoadingHandler<Result = unknown> = (
-  ctx: TranslateHandlerContext,
-) => Result;
-/** Function called when no message is found for the given key. */
-export type MissingHandler<Result = unknown> = (
-  ctx: TranslateHandlerContext,
+  ctx: HandlerContext & { rawMessage: string },
 ) => Result;
 
 /**
- * Context object passed to translation-related functions.
+ * Snapshot of the translate pipeline context exposed to handlers.
  *
- * @example
- * {
- *   locale: "en",
- *   key: "home.title",
- *   replacements: { name: "John" }
- * }
+ * This is a readonly view of TranslateContext:
+ * - Handlers can inspect the translation state
+ * - Handlers must NOT modify it
+ * - Pipeline will not be affected by handler changes
  */
-export type TranslateHandlerContext = {
-  /** The current locale being translated. */
-  locale: Locale;
-  /** The translation key for the message. */
-  key: string;
-  /** Optional replacements for dynamic interpolation in the message. */
-  replacements?: Replacement;
-};
+export type HandlerContext = Readonly<Omit<TranslateContext, "finalMessage">>;

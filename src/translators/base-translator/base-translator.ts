@@ -1,7 +1,12 @@
 import type { BaseTranslatorOptions } from "./types";
 import type { Locale, LocaleMessages } from "@/types";
 
-export class BaseTranslator<M = unknown> {
+/**
+ * The minimal, shared foundation for all translators.
+ *
+ * @template M - Shape of the messages object.
+ */
+export class BaseTranslator<M extends LocaleMessages> {
   /** Current messages for translation */
   protected _messages: Readonly<M>;
   /** Current active locale */

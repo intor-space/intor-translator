@@ -1,31 +1,34 @@
-// Translator
+// translator
 export {
-  ScopeTranslator,
-  ScopeTranslator as Translator, // Alias
-  type ScopeTranslatorOptions,
-  type ScopeTranslatorMethods,
+  ScopeTranslator as Translator,
+  type ScopeTranslatorOptions as TranslatorOptions,
+  type ScopeTranslatorMethods as TranslatorMethods,
+  // plugin
+  type TranslatorPlugin,
+  // translate config / handlers
+  type TranslateConfig,
+  type TranslateHandlers,
+  type FormatHandler,
+  type LoadingHandler,
+  type MissingHandler,
+  type HandlerContext,
 } from "@/translators";
 
-// Translate handlers
-export type {
-  TranslateHandlers,
-  FormatHandler,
-  LoadingHandler,
-  MissingHandler,
-  TranslateHandlerContext,
-} from "@/translator-methods/translate";
+// pipeline
+export type { TranslateContext, TranslateHook } from "@/pipeline";
 
+// types
 export type {
-  // Locale
+  // locale
   Locale,
   FallbackLocalesMap,
-  // Messages
+  // messages
   NestedMessage,
   LocaleMessages,
   LocalizedMessagesUnion,
-  // Replacement
+  // replacement
   Replacement,
-  // Keys
+  // keys
   DefaultDepth,
   NodeKeys,
   LeafKeys,

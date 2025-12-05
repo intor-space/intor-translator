@@ -5,9 +5,9 @@ import type { LocalizedNodeKeys, LocalizedLeafKeys } from "@/types";
 import { expectType } from "tsd";
 
 /**
- * ===========================
- * Test locale messages
- * ===========================
+ * =====================================
+ * Test Messages
+ * =====================================
  */
 const messages = {
   en: {
@@ -29,50 +29,59 @@ const messages = {
 const emptyMessages = {} as const;
 
 const singleLocale = {
-  en: {
-    hello: "hello",
-  },
+  en: { hello: "hello" },
 } as const;
 
 /**
- * ===========================
- * LocalizedLeafKeys tests
- * ===========================
+ * =====================================
+ * 1. LocalizedLeafKeys — Union Mode
+ * =====================================
  */
-
-// 1. Union of all locales
 expectType<
   "greeting.morning" | "greeting.night" | "greeting.evening" | "farewell"
 >(null as unknown as LocalizedLeafKeys<typeof messages>);
 
-// 2. Specified locale "en"
+/**
+ * =====================================
+ * 2. LocalizedLeafKeys — Locale Narrowing
+ * =====================================
+ */
 expectType<"greeting.morning" | "greeting.night" | "farewell">(
   null as unknown as LocalizedLeafKeys<typeof messages, "en">,
 );
 
-// 3. Specified locale "zh"
 expectType<"greeting.morning" | "greeting.evening" | "farewell">(
   null as unknown as LocalizedLeafKeys<typeof messages, "zh">,
 );
 
-// 4. Single locale
+/**
+ * =====================================
+ * 3. LocalizedLeafKeys — Single Locale
+ * =====================================
+ */
 expectType<"hello">(
   null as unknown as LocalizedLeafKeys<typeof singleLocale, "en">,
 );
 
-// 5. Empty messages
+/**
+ * =====================================
+ * 4. LocalizedLeafKeys — Empty Messages
+ * =====================================
+ */
 expectType<never>(null as unknown as LocalizedLeafKeys<typeof emptyMessages>);
 
-// 6. Fallback type when not LocaleMessages
-expectType<string>(null as unknown as LocalizedLeafKeys<unknown>);
+/**
+ * =====================================
+ * 5. LocalizedLeafKeys — Fallback (no type)
+ * =====================================
+ */
+expectType<string>(null as unknown as LocalizedLeafKeys);
 
 /**
- * ===========================
- * LocalizedNodeKeys tests
- * ===========================
+ * =====================================
+ * 6. LocalizedNodeKeys — Union Mode
+ * =====================================
  */
-
-// 1. Union of all locales
 expectType<
   | "greeting"
   | "greeting.morning"
@@ -81,23 +90,38 @@ expectType<
   | "farewell"
 >(null as unknown as LocalizedNodeKeys<typeof messages>);
 
-// 2. Specified locale "en"
+/**
+ * =====================================
+ * 7. LocalizedNodeKeys — Locale Narrowing
+ * =====================================
+ */
 expectType<"greeting" | "greeting.morning" | "greeting.night" | "farewell">(
   null as unknown as LocalizedNodeKeys<typeof messages, "en">,
 );
 
-// 3. Specified locale "zh"
 expectType<"greeting" | "greeting.morning" | "greeting.evening" | "farewell">(
   null as unknown as LocalizedNodeKeys<typeof messages, "zh">,
 );
 
-// 4. Single locale
+/**
+ * =====================================
+ * 8. LocalizedNodeKeys — Single Locale
+ * =====================================
+ */
 expectType<"hello">(
   null as unknown as LocalizedNodeKeys<typeof singleLocale, "en">,
 );
 
-// 5. Empty messages
+/**
+ * =====================================
+ * 9. LocalizedNodeKeys — Empty Messages
+ * =====================================
+ */
 expectType<never>(null as unknown as LocalizedNodeKeys<typeof emptyMessages>);
 
-// 6. Fallback type when not LocaleMessages
-expectType<string>(null as unknown as LocalizedNodeKeys<unknown>);
+/**
+ * =====================================
+ * 10. LocalizedNodeKeys — Fallback
+ * =====================================
+ */
+expectType<string>(null as unknown as LocalizedNodeKeys);

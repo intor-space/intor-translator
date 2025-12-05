@@ -1,12 +1,12 @@
 /* eslint-disable unicorn/no-useless-undefined */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { hasKey } from "@/translator-methods/has-key/has-key";
-import { findMessageInLocales } from "@/utils/find-message-in-locales";
-import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
+import { hasKey } from "@/translators/shared/has-key";
+import { findMessageInLocales } from "@/translators/shared/utils/find-message-in-locales";
+import { resolveCandidateLocales } from "@/translators/shared/utils/resolve-candidate-locales";
 
 // mock utils
-vi.mock("@/utils/find-message-in-locales");
-vi.mock("@/utils/resolve-candidate-locales");
+vi.mock("@/translators/shared/utils/find-message-in-locales");
+vi.mock("@/translators/shared/utils/resolve-candidate-locales");
 
 describe("hasKey", () => {
   const messages = {

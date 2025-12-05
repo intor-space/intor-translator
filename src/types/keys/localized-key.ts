@@ -3,11 +3,7 @@ import type {
   LeafKeys,
   NodeKeys,
 } from "@/types/keys/key-extraction-utils";
-import type {
-  LocaleMessages,
-  LocalizedMessagesUnion,
-  NestedMessage,
-} from "@/types/messages";
+import type { LocaleMessages } from "@/types/messages";
 
 /**
  * Extracts all **node keys** from the messages
@@ -32,14 +28,14 @@ import type {
  * ```
  */
 export type LocalizedNodeKeys<
-  M = unknown,
+  M extends LocaleMessages | undefined = undefined,
   L extends keyof M | "union" = "union",
   D extends number = DefaultDepth,
-> = M extends LocaleMessages
-  ? LocalizedMessagesUnion<M, L> extends NestedMessage
-    ? NodeKeys<LocalizedMessagesUnion<M, L>, D>
-    : never
-  : string;
+> = [M] extends [undefined]
+  ? string
+  : L extends "union"
+    ? NodeKeys<M[keyof M], D>
+    : NodeKeys<M[Extract<L, keyof M>], D>;
 
 /**
  * Extracts all **leaf keys** from the messages
@@ -64,11 +60,11 @@ export type LocalizedNodeKeys<
  * ```
  */
 export type LocalizedLeafKeys<
-  M = unknown,
+  M extends LocaleMessages | undefined = undefined,
   L extends keyof M | "union" = "union",
   D extends number = DefaultDepth,
-> = M extends LocaleMessages
-  ? LocalizedMessagesUnion<M, L> extends NestedMessage
-    ? LeafKeys<LocalizedMessagesUnion<M, L>, D>
-    : never
-  : string;
+> = [M] extends [undefined]
+  ? string
+  : L extends "union"
+    ? LeafKeys<M[keyof M], D>
+    : LeafKeys<M[Extract<L, keyof M>], D>;

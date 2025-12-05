@@ -1,7 +1,14 @@
-import type { HasKeyOptions } from "./types";
 import type { LocaleMessages } from "@/types";
-import { findMessageInLocales } from "@/utils/find-message-in-locales";
-import { resolveCandidateLocales } from "@/utils/resolve-candidate-locales";
+import type { Locale } from "@/types";
+import { findMessageInLocales } from "@/translators/shared/utils/find-message-in-locales";
+import { resolveCandidateLocales } from "@/translators/shared/utils/resolve-candidate-locales";
+
+export type HasKeyOptions = {
+  messages: Readonly<LocaleMessages>;
+  locale: Locale;
+  key: string;
+  targetLocale?: Locale;
+};
 
 /**
  * Check if a key exists in the specified locale or current locale.

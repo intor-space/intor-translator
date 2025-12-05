@@ -1,13 +1,17 @@
+// locale
 export type { Locale, FallbackLocalesMap } from "./locale";
 
+// messages
 export type {
   NestedMessage,
   LocaleMessages,
   LocalizedMessagesUnion,
 } from "./messages";
 
+// replacement
 export type { Replacement } from "./replacement";
 
+// keys
 export type {
   DefaultDepth,
   NodeKeys,

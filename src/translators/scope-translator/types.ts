@@ -1,10 +1,15 @@
 import type { CoreTranslatorOptions } from "@/translators/core-translator";
-import type { Locale, Replacement, LocalizedLeafKeys } from "@/types";
+import type {
+  Locale,
+  Replacement,
+  LocalizedLeafKeys,
+  LocaleMessages,
+} from "@/types";
 
 export type ScopeTranslatorOptions<M> = CoreTranslatorOptions<M>;
 
 export type ScopeTranslatorMethods<
-  M,
+  M extends LocaleMessages | undefined = undefined,
   L extends keyof M | "union" = "union",
   K = LocalizedLeafKeys<M, L>,
 > = {
